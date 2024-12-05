@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Turbo Dash",
-  "version": "1.0",
+  "version": "1.1",
   "description": "A turbocharged dashboard for your new tab",
   "chrome_url_overrides": {
     "newtab": "tab.html"
