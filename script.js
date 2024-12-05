@@ -1,316 +1,222 @@
-// Initialize time and weather when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Page loaded, initializing...');
-    loadSettings();
-    updateTime();
-    updateWeather();
-    
-    // Update time every second
-    setInterval(updateTime, 1000);
-    
-    // Update weather every 30 minutes
-    setInterval(updateWeather, 30 * 60 * 1000);
-});
+<!DOCTYPE html>
+<html lang="en" data-theme="cupcake">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Brutalist Tab</title>
+    <link rel="stylesheet" href="src/output.css">
+    <script src="lib/feather.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap" rel="stylesheet">
 
-function loadSettings() {
-    // Load settings from localStorage
-    const settings = JSON.parse(localStorage.getItem('tabSettings')) || {
-        theme: 'cupcake',
-        name: 'Tom',
-        links: [
-            { name: 'Marketer Tools', url: 'https://marketertools.co' },
-            { name: "Tom's Blog", url: 'https://tomsnyder.blog' },
-            { name: 'Buy Me a Coffee', url: 'https://buymeacoffee.com/turbologic' }
-        ],
-        icons: [
-            { icon: 'search', url: 'https://google.com' },
-            { icon: 'coffee', url: 'https://buymeacoffee.com/turbologic' },
-            { icon: 'linkedin', url: 'https://linkedin.com' }
-        ]
-    };
-
-    // Apply settings
-    document.documentElement.setAttribute('data-theme', settings.theme);
-    document.querySelector('h1').textContent = `Hi, ${settings.name}`;
-    
-    // Update links on tab.html
-    const linksContainer = document.querySelector('.links');
-    if (linksContainer) {
-        // Clear existing links
-        linksContainer.innerHTML = '';
+    <style>
+        /* Existing styles */
         
-        // Add all links from settings
-        settings.links.forEach(link => {
-            const linkElement = document.createElement('a');
-            linkElement.href = link.url;
-            linkElement.textContent = link.name;
-            linkElement.className = 'text-xl font-bold hover:text-primary hover:underline transition-all';
-            linksContainer.appendChild(linkElement);
-        });
-
-        // Hide the container if there are no links
-        const linksWrapper = document.querySelector('.links-container');
-        if (linksWrapper) {
-            linksWrapper.style.display = settings.links.length ? 'block' : 'none';
+        .title-font {
+            font-family: 'Dela Gothic One', system-ui;
         }
-    }
+    </style>
 
-    // Update quick icons
-    const iconsContainer = document.querySelector('.quick-icons');
-    console.log('Icons from settings:', settings.icons); // Debug log
-    console.log('Icons container found:', iconsContainer); // Debug log
+</head>
+<body>
+<div class="min-h-screen bg-base-300 text-base-content p-10">
+    <!-- Back Button -->
+    <a href="tab.html" class="btn btn-square btn-base-100 absolute top-4 left-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-xl">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="square" stroke-linejoin="miter" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+        </svg>
+    </a>
 
-    if (iconsContainer) {
-        iconsContainer.innerHTML = '';
-        settings.icons.forEach(icon => {
-            console.log('Creating icon:', icon); // Debug log
-            const iconLink = document.createElement('a');
-            iconLink.href = icon.url;
-            iconLink.className = 'p-4 hover:bg-base-200 rounded-xl transition-all group';
-            iconLink.innerHTML = `<i data-feather="${icon.icon}" class="stroke-current group-hover:stroke-primary transition-colors"></i>`;
-            iconsContainer.appendChild(iconLink);
-        });
-        
-        // Initialize Feather icons
-        console.log('Initializing Feather icons'); // Debug log
-        feather.replace();
-    }
-
-    // Handle todo list visibility and items
-    const todoContainer = document.getElementById('todo-container');
-    if (todoContainer) {
-        if (settings.showTodo) {
-            todoContainer.style.display = 'block';
-            initializeTodoList();
-        } else {
-            todoContainer.style.display = 'none';
-        }
-    }
-
-    // Handle search container visibility
-    const searchContainer = document.getElementById('search-container');
-    if (searchContainer) {
-        searchContainer.style.display = settings.showSearch ? 'block' : 'none';
-    }
-
-    // Handle weather container visibility
-    const weatherContainer = document.getElementById('weather');
-    if (weatherContainer) {
-        if (settings.showWeather) {
-            weatherContainer.style.display = 'block';
-            updateWeather();
-        } else {
-            weatherContainer.style.display = 'none';
-        }
-    }
-
-    // Initialize feather icons
-    feather.replace();
-}
-
-function saveSettings() {
-    const settings = {
-        theme: document.getElementById('theme-select').value,
-        name: document.getElementById('name-input').value,
-        links: []
-    };
-
-    // Get link values
-    const linkInputs = document.querySelectorAll('.grid.gap-4 input');
-    for (let i = 0; i < linkInputs.length; i += 2) {
-        settings.links.push({
-            name: linkInputs[i].value,
-            url: linkInputs[i + 1].value
-        });
-    }
-
-    // Save to localStorage
-    localStorage.setItem('tabSettings', JSON.stringify(settings));
-
-    // Apply settings
-    document.documentElement.setAttribute('data-theme', settings.theme);
-    document.querySelector('h1').textContent = `Hi, ${settings.name}`;
-
-    // Update link buttons
-    const linkButtons = document.querySelectorAll('.links a');
-    settings.links.forEach((link, index) => {
-        linkButtons[index].textContent = link.name;
-        linkButtons[index].href = link.url;
-    });
-
-    // Close modal
-    document.getElementById('settings_modal').close();
-}
-
-function updateTime() {
-    const now = new Date();
-    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const timeElement = document.getElementById('clock');
-    if (!timeElement) {
-        console.error('Clock element not found');
-        return;
-    }
-    timeElement.textContent = timeString;
-}
-
-async function updateWeather() {
-    console.log('updateWeather function called');
-    const weatherElement = document.getElementById('weather');
-    if (!weatherElement || !JSON.parse(localStorage.getItem('tabSettings'))?.showWeather) return;
-
-    // Get settings from localStorage
-    const settings = JSON.parse(localStorage.getItem('tabSettings')) || {};
-    const apiKey = settings.weatherApiKey;
-    const lat = settings.weatherLat;
-    const lon = settings.weatherLon;
-
-    const loadingDiv = weatherElement.querySelector('.weather-loading');
-    const errorDiv = weatherElement.querySelector('.weather-error'); 
-    const dataDiv = weatherElement.querySelector('.weather-data');
-    const tempSpan = dataDiv.querySelector('.temp');
-    const descSpan = dataDiv.querySelector('.description');
-
-    // Show loading, hide others
-    loadingDiv.style.display = 'block';
-    errorDiv.style.display = 'none';
-    dataDiv.style.display = 'none';
-
-    if (!apiKey || !lat || !lon) {
-        loadingDiv.style.display = 'none';
-        errorDiv.style.display = 'block';
-        errorDiv.textContent = !apiKey ? 'Add Weather API Key in Settings' : 'Add Location in Settings';
-        return;
-    }
-
-    try {
-        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
-        const response = await fetch(apiUrl);
-        
-        if (!response.ok) {
-            throw new Error(response.status === 401 ? 'Invalid API key' : 'Weather data not available');
-        }
-        
-        const data = await response.json();
-        console.log('Weather data:', data);
-
-        const temp = Math.round((data.main.temp - 273.15) * 9/5 + 32); // Convert Kelvin to Fahrenheit
-        const condition = data.weather[0].main;
-        
-        // Map OpenWeather conditions to Feather icons
-        const weatherIcons = {
-            'Clear': 'sun',
-            'Clouds': 'cloud',
-            'Rain': 'cloud-rain',
-            'Drizzle': 'cloud-drizzle',
-            'Thunderstorm': 'cloud-lightning',
-            'Snow': 'cloud-snow',
-            'Mist': 'cloud',
-            'Smoke': 'cloud',
-            'Haze': 'cloud',
-            'Dust': 'wind',
-            'Fog': 'cloud',
-            'Sand': 'wind',
-            'Ash': 'wind',
-            'Squall': 'wind',
-            'Tornado': 'wind'
-        };
-
-        const iconName = weatherIcons[condition] || 'cloud';
-        
-        weatherElement.innerHTML = `
-            <div class="flex items-center justify-center gap-6">
-                <i data-feather="${iconName}" class="w-20 h-20 stroke-current"></i>
-                <span>${condition}, ${temp}°F</span>
+    <div class="max-w-3xl mx-auto">
+        <!-- Title Section -->
+        <div class="text-center mb-12">
+            <div class="flex items-center justify-center gap-4 mb-2">
+                <img src="icons/turbo-dash-logo.png" alt="Turbo Dash Logo" class="w-16 h-16 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <h1 class="text-5xl title-font mb-2">Turbo Dash</h1>
             </div>
-        `;
+            <p class="text-base-content/70">Your personal dashboard, turbocharged.</p>
+        </div>
+
+        <h2 class="text-2xl font-bold mb-8">Settings</h2>
         
-        feather.replace();
-    } catch (error) {
-        console.error('Error fetching weather:', error);
-        weatherElement.innerHTML = `
-            <div class="flex items-center justify-center gap-4">
-                <i data-feather="alert-triangle" class="w-12 h-12"></i>
-                <span>${error.message === 'Invalid API key' ? 'Invalid API Key' : 'Weather Unavailable'}</span>
+        <div class="space-y-8">
+            <!-- Theme Selection -->
+            <div class="form-control mb-6">
+                <label class="label">
+                    <span class="label-text text-lg font-bold">Theme</span>
+                </label>
+                <select id="theme-select" class="select w-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100">
+                    <option value="cupcake">Cupcake</option>
+                    <option value="dark">Dark</option>
+                    <option value="cyberpunk">Cyberpunk</option>
+                    <option value="forest">Forest</option>
+                    <option value="business">Business</option>
+                    <option value="night">Night</option>
+                    <option value="bumblebee">Bumblebee</option>
+                    <option value="retro">Retro</option>
+                    <option value="synthwave">Synthwave</option>
+                    <option value="valentine">Valentine</option>
+                    <option value="aqua">Aqua</option>
+                    <option value="dracula">Dracula</option>
+                    <option value="luxury">Luxury</option>
+                    <option value="coffee">Coffee</option>
+                    <option value="winter">Winter</option>
+                    <option value="garden">Garden</option>
+                    <option value="lofi">Lo-Fi</option>
+                    <option value="pastel">Pastel</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="wireframe">Wireframe</option>
+                </select>
             </div>
-        `;
-        feather.replace();
-    }
-}
 
-function initializeTodoList() {
-    const settings = JSON.parse(localStorage.getItem('tabSettings')) || {};
-    const todoList = document.getElementById('todo-list');
-    const todoInput = document.querySelector('.todo-input input');
-    const addButton = document.querySelector('.add-todo');
+            <!-- Name Input -->
+            <div class="form-control mb-6">
+                <label class="label">
+                    <span class="label-text text-lg font-bold">Your Name</span>
+                </label>
+                <input type="text" id="name-input" placeholder="Enter your name" class="input w-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" />
+            </div>
 
-    // Clear existing todos
-    todoList.innerHTML = '';
+            <!-- Weather Settings -->
+            <div class="form-control mb-8">
+                <label class="label">
+                    <span class="label-text text-lg font-bold">Weather Settings</span>
+                </label>
+                
+                <!-- Accordion for API Instructions -->
+                <div class="collapse collapse-arrow bg-base-100 border-2 border-black rounded-xl mb-4">
+                    <input type="checkbox" /> 
+                    <div class="collapse-title text-lg font-bold">
+                        How to get your free OpenWeather API key
+                    </div>
+                    <div class="collapse-content">
+                        <ol class="list-decimal list-inside space-y-2">
+                            <li>Visit <a href="https://openweathermap.org/api" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">OpenWeather API</a></li>
+                            <li>Click "Subscribe" under the Free tier</li>
+                            <li>Create an account or sign in</li>
+                            <li>Go to your API keys section</li>
+                            <li>Copy your API key and paste it below</li>
+                            <li>Note: New API keys may take a few hours to activate</li>
+                        </ol>
+                    </div>
+                </div>
 
-    // Load saved todos
-    settings.todos?.forEach(todo => {
-        addTodoItem(todo.text, todo.completed);
-    });
+                <!-- API Key Input -->
+                <input type="text" 
+                       id="weather-api-key" 
+                       placeholder="Paste your OpenWeather API key here" 
+                       class="input w-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100 mb-4" />
 
-    // Add new todo handler
-    addButton.addEventListener('click', () => {
-        if (todoInput.value.trim() && settings.todos.length < 3) {
-            addTodoItem(todoInput.value.trim());
-            todoInput.value = '';
-            saveTodos();
-        }
-    });
+                <!-- Latitude and Longitude Inputs -->
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="label">
+                            <span class="label-text">Latitude</span>
+                        </label>
+                        <input type="number" 
+                               id="weather-lat" 
+                               step="0.000001"
+                               placeholder="e.g., 40.7128" 
+                               class="input w-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" />
+                    </div>
+                    <div>
+                        <label class="label">
+                            <span class="label-text">Longitude</span>
+                        </label>
+                        <input type="number" 
+                               id="weather-lon" 
+                               step="0.000001"
+                               placeholder="e.g., -74.0060" 
+                               class="input w-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" />
+                    </div>
+                </div>
+                <div class="mt-2 text-sm text-base-content/70">
+                    <p>Find your coordinates at: <a href="https://www.latlong.net" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">latlong.net</a></p>
+                </div>
+            </div>
 
-    // Enter key handler
-    todoInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && todoInput.value.trim() && settings.todos.length < 3) {
-            addTodoItem(todoInput.value.trim());
-            todoInput.value = '';
-            saveTodos();
-        }
-    });
-}
+            <!-- Add-ons -->
+            <div class="form-control mb-8">
+                <label class="label">
+                    <span class="label-text text-lg font-bold">Add-ons</span>
+                </label>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-center">
+                        <label class="label cursor-pointer">
+                            <input type="checkbox" id="show-search" class="checkbox checkbox-primary border-2 border-black" />
+                            <span class="label-text ml-2">Show Google Search Bar</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center">
+                        <label class="label cursor-pointer">
+                            <input type="checkbox" id="show-todo" class="checkbox checkbox-primary border-2 border-black" />
+                            <span class="label-text ml-2">Show To-Do List</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center">
+                        <label class="label cursor-pointer">
+                            <input type="checkbox" id="show-weather" class="checkbox checkbox-primary border-2 border-black" />
+                            <span class="label-text ml-2">Show Weather Widget</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
 
-function addTodoItem(text, completed = false) {
-    const todoList = document.getElementById('todo-list');
-    const todoItem = document.createElement('div');
-    todoItem.className = 'todo-item flex items-center gap-4 group';
+            <!-- Quick Icons Configuration -->
+            <div class="form-control mb-8">
+                <label class="label">
+                    <span class="label-text text-lg font-bold">Quick Icons</span>
+                </label>
+                <div id="iconContainer" class="grid gap-4">
+                    <!-- Icons will be added here dynamically -->
+                </div>
+                <button id="addIconButton" class="btn btn-base-100 mt-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">
+                    + Add Quick Icon
+                </button>
+            </div>
+
+            <!-- Links Configuration -->
+            <div class="space-y-4 mb-8">
+                <label class="label">
+                    <span class="label-text text-lg font-bold">Quick Links</span>
+                </label>
+                <div id="linkContainer" class="grid gap-4">
+                    <!-- Links will be added here dynamically -->
+                </div>
+                <button id="addLinkButton" class="btn btn-base-100 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">
+                    + Add Another Link
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-10">
+            <button id="saveButton" class="btn btn-primary border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[4px] hover:translate-x-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">Save Changes</button>
+            
+            <a href="https://buymeacoffee.com/turbologic" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="btn btn-accent h-16 w-16 rounded-full border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[4px] hover:translate-x-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center text-3xl fixed bottom-8 right-8">
+                ☕️
+            </a>
+        </div>
+
+        <div class="mt-8 text-center text-sm text-base-content/70">
+            <p>Version 1.0.0 • Made with ♥ by 
+                <a href="https://tomsnyder.blog" target="_blank" rel="noopener noreferrer" class="hover:underline">
+                    Tom
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+<script src="settings.js"></script>
+<style>
+    /* Existing styles */
     
-    todoItem.innerHTML = `
-        <input type="checkbox" class="checkbox checkbox-primary border-2 border-black" ${completed ? 'checked' : ''}>
-        <span class="flex-grow text-xl ${completed ? 'line-through opacity-50' : ''}">${text}</span>
-        <button class="delete-todo opacity-0 group-hover:opacity-100 transition-opacity btn btn-ghost btn-xs text-error">
-            <i data-feather="x"></i>
-        </button>
-    `;
-
-    // Add event listeners
-    const checkbox = todoItem.querySelector('input');
-    checkbox.addEventListener('change', () => {
-        const span = todoItem.querySelector('span');
-        span.classList.toggle('line-through');
-        span.classList.toggle('opacity-50');
-        saveTodos();
-    });
-
-    const deleteButton = todoItem.querySelector('.delete-todo');
-    deleteButton.addEventListener('click', () => {
-        todoItem.remove();
-        saveTodos();
-    });
-
-    todoList.appendChild(todoItem);
-    feather.replace();
-}
-function saveTodos() {
-    const settings = JSON.parse(localStorage.getItem('tabSettings')) || {};
-    const todos = [];
-    document.querySelectorAll('.todo-item').forEach(item => {
-        todos.push({
-            text: item.querySelector('span').textContent,
-            completed: item.querySelector('input').checked
-        });
-    });
-    settings.todos = todos;
-    localStorage.setItem('tabSettings', JSON.stringify(settings));
-}
-
+    .title-font {
+        font-family: 'Dela Gothic One', system-ui;
+    }
+</style>
+</body>
+</html> 
