@@ -1,252 +1,316 @@
+// Initialize time and weather when the page loads
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('Page loaded, initializing...');
     loadSettings();
+    updateTime();
+    updateWeather();
     
-    // Add theme change listener
-    const themeSelect = document.getElementById('theme-select');
-    if (themeSelect) {
-        themeSelect.addEventListener('change', function() {
-            document.documentElement.setAttribute('data-theme', this.value);
-        });
-    }
-
-    // Add save button listener
-    const saveButton = document.getElementById('saveButton');
-    if (saveButton) {
-        saveButton.addEventListener('click', saveSettings);
-    }
-
-    // Add new link button listener
-    const addLinkButton = document.getElementById('addLinkButton');
-    if (addLinkButton) {
-        addLinkButton.addEventListener('click', addNewLink);
-    }
-
-    // Add new icon button listener
-    const addIconButton = document.getElementById('addIconButton');
-    if (addIconButton) {
-        addIconButton.addEventListener('click', function() {
-            const iconContainer = document.getElementById('iconContainer');
-            if (iconContainer) {
-                iconContainer.appendChild(createIconInputs());
-            }
-        });
-    }
+    // Update time every second
+    setInterval(updateTime, 1000);
+    
+    // Update weather every 30 minutes
+    setInterval(updateWeather, 30 * 60 * 1000);
 });
 
-function createLinkInputs(name = '', url = '') {
-    const linkDiv = document.createElement('div');
-    linkDiv.className = 'flex gap-4 items-center';
-    
-    linkDiv.innerHTML = `
-        <input type="text" placeholder="Link Name" class="input w-1/2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" value="${name}"/>
-        <input type="url" placeholder="https://example.com" class="input w-1/2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" value="${url}"/>
-        <button class="btn btn-ghost btn-sm text-error border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all rounded-lg">×</button>
-    `;
-
-    const removeButton = linkDiv.querySelector('button');
-    removeButton.addEventListener('click', () => linkDiv.remove());
-
-    return linkDiv;
-}
-
-function createIconInputs(icon = '', url = '') {
-    const iconDiv = document.createElement('div');
-    iconDiv.className = 'flex gap-4 items-center';
-    
-    iconDiv.innerHTML = `
-        <select class="icon-select input w-1/2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100">
-            <option value="battery" ${icon === 'battery' ? 'selected' : ''}>Battery</option>
-            <option value="bell" ${icon === 'bell' ? 'selected' : ''}>Bell</option>
-            <option value="bluetooth" ${icon === 'bluetooth' ? 'selected' : ''}>Bluetooth</option>
-            <option value="book" ${icon === 'book' ? 'selected' : ''}>Book</option>
-            <option value="bookmark" ${icon === 'bookmark' ? 'selected' : ''}>Bookmark</option>
-            <option value="briefcase" ${icon === 'briefcase' ? 'selected' : ''}>Briefcase</option>
-            <option value="calendar" ${icon === 'calendar' ? 'selected' : ''}>Calendar</option>
-            <option value="camera" ${icon === 'camera' ? 'selected' : ''}>Camera</option>
-            <option value="chrome" ${icon === 'chrome' ? 'selected' : ''}>Chrome</option>
-            <option value="cloud" ${icon === 'cloud' ? 'selected' : ''}>Cloud</option>
-            <option value="code" ${icon === 'code' ? 'selected' : ''}>Code</option>
-            <option value="coffee" ${icon === 'coffee' ? 'selected' : ''}>Coffee</option>
-            <option value="compass" ${icon === 'compass' ? 'selected' : ''}>Compass</option>
-            <option value="credit-card" ${icon === 'credit-card' ? 'selected' : ''}>Credit Card</option>
-            <option value="dollar-sign" ${icon === 'dollar-sign' ? 'selected' : ''}>Dollar</option>
-            <option value="download" ${icon === 'download' ? 'selected' : ''}>Download</option>
-            <option value="edit" ${icon === 'edit' ? 'selected' : ''}>Edit</option>
-            <option value="file" ${icon === 'file' ? 'selected' : ''}>File</option>
-            <option value="film" ${icon === 'film' ? 'selected' : ''}>Film</option>
-            <option value="flag" ${icon === 'flag' ? 'selected' : ''}>Flag</option>
-            <option value="folder" ${icon === 'folder' ? 'selected' : ''}>Folder</option>
-            <option value="github" ${icon === 'github' ? 'selected' : ''}>GitHub</option>
-            <option value="heart" ${icon === 'heart' ? 'selected' : ''}>Heart</option>
-            <option value="home" ${icon === 'home' ? 'selected' : ''}>Home</option>
-            <option value="image" ${icon === 'image' ? 'selected' : ''}>Image</option>
-            <option value="inbox" ${icon === 'inbox' ? 'selected' : ''}>Inbox</option>
-            <option value="key" ${icon === 'key' ? 'selected' : ''}>Key</option>
-            <option value="linkedin" ${icon === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
-            <option value="location" ${icon === 'location' ? 'selected' : ''}>Location</option>
-            <option value="lock" ${icon === 'lock' ? 'selected' : ''}>Lock</option>
-            <option value="mail" ${icon === 'mail' ? 'selected' : ''}>Mail</option>
-            <option value="map" ${icon === 'map' ? 'selected' : ''}>Map</option>
-            <option value="music" ${icon === 'music' ? 'selected' : ''}>Music</option>
-            <option value="phone" ${icon === 'phone' ? 'selected' : ''}>Phone</option>
-            <option value="printer" ${icon === 'printer' ? 'selected' : ''}>Printer</option>
-            <option value="search" ${icon === 'search' ? 'selected' : ''}>Search</option>
-            <option value="send" ${icon === 'send' ? 'selected' : ''}>Send</option>
-            <option value="settings" ${icon === 'settings' ? 'selected' : ''}>Settings</option>
-            <option value="shopping-cart" ${icon === 'shopping-cart' ? 'selected' : ''}>Shopping Cart</option>
-            <option value="star" ${icon === 'star' ? 'selected' : ''}>Star</option>
-            <option value="tablet" ${icon === 'tablet' ? 'selected' : ''}>Tablet</option>
-            <option value="tag" ${icon === 'tag' ? 'selected' : ''}>Tag</option>
-            <option value="trash" ${icon === 'trash' ? 'selected' : ''}>Trash</option>
-            <option value="tv" ${icon === 'tv' ? 'selected' : ''}>TV</option>
-            <option value="twitter" ${icon === 'twitter' ? 'selected' : ''}>Twitter</option>
-            <option value="unlock" ${icon === 'unlock' ? 'selected' : ''}>Unlock</option>
-            <option value="upload" ${icon === 'upload' ? 'selected' : ''}>Upload</option>
-            <option value="user" ${icon === 'user' ? 'selected' : ''}>User</option>
-            <option value="users" ${icon === 'users' ? 'selected' : ''}>Users</option>
-            <option value="video" ${icon === 'video' ? 'selected' : ''}>Video</option>
-            <option value="wifi" ${icon === 'wifi' ? 'selected' : ''}>WiFi</option>
-            <option value="youtube" ${icon === 'youtube' ? 'selected' : ''}>YouTube</option>
-        </select>
-        <input type="url" placeholder="https://example.com" class="input w-1/2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" value="${url}"/>
-        <button class="btn btn-ghost btn-sm text-error border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all rounded-lg">×</button>
-    `;
-
-    const removeButton = iconDiv.querySelector('button');
-    removeButton.addEventListener('click', () => iconDiv.remove());
-
-    return iconDiv;
-}
-
-function addNewLink() {
-    const linkContainer = document.getElementById('linkContainer');
-    linkContainer.appendChild(createLinkInputs());
-}
-
-function addNewIcon() {
-    const iconContainer = document.getElementById('iconContainer');
-    if (iconContainer) {
-        iconContainer.appendChild(createIconInputs());
-    }
-}
-
 function loadSettings() {
+    // Load settings from localStorage
     const settings = JSON.parse(localStorage.getItem('tabSettings')) || {
         theme: 'cupcake',
         name: 'Tom',
-        weatherApiKey: '',
-        weatherLat: '',
-        weatherLon: '',
-        showTodo: false,
-        showWeather: true,
-        todos: [],
         links: [
-            { name: 'Link 1', url: '#' },
-            { name: 'Link 2', url: '#' },
-            { name: 'Link 3', url: '#' }
+            { name: 'Marketer Tools', url: 'https://marketertools.co' },
+            { name: "Tom's Blog", url: 'https://tomsnyder.blog' },
+            { name: 'Buy Me a Coffee', url: 'https://buymeacoffee.com/turbologic' }
         ],
         icons: [
             { icon: 'search', url: 'https://google.com' },
-            { icon: 'coffee', url: 'https://buymeacoffee.com/turbologic' }
-        ],
-        showSearch: false,
+            { icon: 'coffee', url: 'https://buymeacoffee.com/turbologic' },
+            { icon: 'linkedin', url: 'https://linkedin.com' }
+        ]
     };
 
-    // Set form values
-    document.getElementById('theme-select').value = settings.theme;
-    document.getElementById('name-input').value = settings.name;
-    document.getElementById('weather-api-key').value = settings.weatherApiKey || '';
-    document.getElementById('weather-lat').value = settings.weatherLat || '';
-    document.getElementById('weather-lon').value = settings.weatherLon || '';
-    document.getElementById('show-todo').checked = settings.showTodo;
-    document.getElementById('show-search').checked = settings.showSearch;
-    document.getElementById('show-weather').checked = settings.showWeather;
-
-    // Apply theme
+    // Apply settings
     document.documentElement.setAttribute('data-theme', settings.theme);
+    document.querySelector('h1').textContent = `Hi, ${settings.name}`;
     
-    // Set link values
-    const linkContainer = document.getElementById('linkContainer');
-    if (linkContainer) {
-        linkContainer.innerHTML = ''; // Clear existing links
+    // Update links on tab.html
+    const linksContainer = document.querySelector('.links');
+    if (linksContainer) {
+        // Clear existing links
+        linksContainer.innerHTML = '';
+        
+        // Add all links from settings
         settings.links.forEach(link => {
-            linkContainer.appendChild(createLinkInputs(link.name, link.url));
+            const linkElement = document.createElement('a');
+            linkElement.href = link.url;
+            linkElement.textContent = link.name;
+            linkElement.className = 'text-xl font-bold hover:text-primary hover:underline transition-all';
+            linksContainer.appendChild(linkElement);
         });
+
+        // Hide the container if there are no links
+        const linksWrapper = document.querySelector('.links-container');
+        if (linksWrapper) {
+            linksWrapper.style.display = settings.links.length ? 'block' : 'none';
+        }
     }
 
-    // Set icon values
-    const iconContainer = document.getElementById('iconContainer');
-    if (iconContainer) {
-        iconContainer.innerHTML = '';
+    // Update quick icons
+    const iconsContainer = document.querySelector('.quick-icons');
+    console.log('Icons from settings:', settings.icons); // Debug log
+    console.log('Icons container found:', iconsContainer); // Debug log
+
+    if (iconsContainer) {
+        iconsContainer.innerHTML = '';
         settings.icons.forEach(icon => {
-            iconContainer.appendChild(createIconInputs(icon.icon, icon.url));
+            console.log('Creating icon:', icon); // Debug log
+            const iconLink = document.createElement('a');
+            iconLink.href = icon.url;
+            iconLink.className = 'p-4 hover:bg-base-200 rounded-xl transition-all group';
+            iconLink.innerHTML = `<i data-feather="${icon.icon}" class="stroke-current group-hover:stroke-primary transition-colors"></i>`;
+            iconsContainer.appendChild(iconLink);
         });
+        
+        // Initialize Feather icons
+        console.log('Initializing Feather icons'); // Debug log
+        feather.replace();
     }
+
+    // Handle todo list visibility and items
+    const todoContainer = document.getElementById('todo-container');
+    if (todoContainer) {
+        if (settings.showTodo) {
+            todoContainer.style.display = 'block';
+            initializeTodoList();
+        } else {
+            todoContainer.style.display = 'none';
+        }
+    }
+
+    // Handle search container visibility
+    const searchContainer = document.getElementById('search-container');
+    if (searchContainer) {
+        searchContainer.style.display = settings.showSearch ? 'block' : 'none';
+    }
+
+    // Handle weather container visibility
+    const weatherContainer = document.getElementById('weather');
+    if (weatherContainer) {
+        if (settings.showWeather) {
+            weatherContainer.style.display = 'block';
+            updateWeather();
+        } else {
+            weatherContainer.style.display = 'none';
+        }
+    }
+
+    // Initialize feather icons
+    feather.replace();
 }
 
 function saveSettings() {
     const settings = {
         theme: document.getElementById('theme-select').value,
         name: document.getElementById('name-input').value,
-        weatherApiKey: document.getElementById('weather-api-key').value.trim(),
-        weatherLat: document.getElementById('weather-lat').value.trim(),
-        weatherLon: document.getElementById('weather-lon').value.trim(),
-        showTodo: document.getElementById('show-todo').checked,
-        showWeather: document.getElementById('show-weather').checked,
-        todos: JSON.parse(localStorage.getItem('tabSettings'))?.todos || [],
-        links: [],
-        icons: [],
-        showSearch: document.getElementById('show-search').checked,
+        links: []
     };
 
     // Get link values
-    const linkInputs = document.querySelectorAll('#linkContainer .flex');
-    linkInputs.forEach(row => {
-        const nameInput = row.querySelector('input[type="text"]');
-        const urlInput = row.querySelector('input[type="url"]');
-        
-        if (nameInput && urlInput) {
-            settings.links.push({
-                name: nameInput.value.trim() || `Link ${settings.links.length + 1}`,
-                url: formatUrl(urlInput.value.trim()) || '#'
-            });
-        }
-    });
-
-    // Get icon values
-    const iconInputs = document.querySelectorAll('#iconContainer .flex');
-    iconInputs.forEach(row => {
-        const iconSelect = row.querySelector('select');
-        const urlInput = row.querySelector('input[type="url"]');
-        
-        if (iconSelect && urlInput) {
-            settings.icons.push({
-                icon: iconSelect.value,
-                url: formatUrl(urlInput.value.trim()) || '#'
-            });
-        }
-    });
+    const linkInputs = document.querySelectorAll('.grid.gap-4 input');
+    for (let i = 0; i < linkInputs.length; i += 2) {
+        settings.links.push({
+            name: linkInputs[i].value,
+            url: linkInputs[i + 1].value
+        });
+    }
 
     // Save to localStorage
     localStorage.setItem('tabSettings', JSON.stringify(settings));
 
-    // Redirect back to main page
-    window.location.href = 'tab.html';
+    // Apply settings
+    document.documentElement.setAttribute('data-theme', settings.theme);
+    document.querySelector('h1').textContent = `Hi, ${settings.name}`;
+
+    // Update link buttons
+    const linkButtons = document.querySelectorAll('.links a');
+    settings.links.forEach((link, index) => {
+        linkButtons[index].textContent = link.name;
+        linkButtons[index].href = link.url;
+    });
+
+    // Close modal
+    document.getElementById('settings_modal').close();
 }
 
-// Helper function to format URLs
-function formatUrl(url) {
-    if (!url) return '#';
-    
-    // Handle special cases for icon URLs
-    if (url.startsWith('data:') || url.startsWith('blob:') || url.startsWith('file:')) {
-        return url;
+function updateTime() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const timeElement = document.getElementById('clock');
+    if (!timeElement) {
+        console.error('Clock element not found');
+        return;
     }
-    
-    // If the URL doesn't start with http:// or https://, add https://
-    if (!url.match(/^https?:\/\//i)) {
-        return 'https://' + url;
-    }
-    
-    return url;
+    timeElement.textContent = timeString;
 }
+
+async function updateWeather() {
+    console.log('updateWeather function called');
+    const weatherElement = document.getElementById('weather');
+    if (!weatherElement || !JSON.parse(localStorage.getItem('tabSettings'))?.showWeather) return;
+
+    // Get settings from localStorage
+    const settings = JSON.parse(localStorage.getItem('tabSettings')) || {};
+    const apiKey = settings.weatherApiKey;
+    const lat = settings.weatherLat;
+    const lon = settings.weatherLon;
+
+    const loadingDiv = weatherElement.querySelector('.weather-loading');
+    const errorDiv = weatherElement.querySelector('.weather-error'); 
+    const dataDiv = weatherElement.querySelector('.weather-data');
+    const tempSpan = dataDiv.querySelector('.temp');
+    const descSpan = dataDiv.querySelector('.description');
+
+    // Show loading, hide others
+    loadingDiv.style.display = 'block';
+    errorDiv.style.display = 'none';
+    dataDiv.style.display = 'none';
+
+    if (!apiKey || !lat || !lon) {
+        loadingDiv.style.display = 'none';
+        errorDiv.style.display = 'block';
+        errorDiv.textContent = !apiKey ? 'Add Weather API Key in Settings' : 'Add Location in Settings';
+        return;
+    }
+
+    try {
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) {
+            throw new Error(response.status === 401 ? 'Invalid API key' : 'Weather data not available');
+        }
+        
+        const data = await response.json();
+        console.log('Weather data:', data);
+
+        const temp = Math.round((data.main.temp - 273.15) * 9/5 + 32); // Convert Kelvin to Fahrenheit
+        const condition = data.weather[0].main;
+        
+        // Map OpenWeather conditions to Feather icons
+        const weatherIcons = {
+            'Clear': 'sun',
+            'Clouds': 'cloud',
+            'Rain': 'cloud-rain',
+            'Drizzle': 'cloud-drizzle',
+            'Thunderstorm': 'cloud-lightning',
+            'Snow': 'cloud-snow',
+            'Mist': 'cloud',
+            'Smoke': 'cloud',
+            'Haze': 'cloud',
+            'Dust': 'wind',
+            'Fog': 'cloud',
+            'Sand': 'wind',
+            'Ash': 'wind',
+            'Squall': 'wind',
+            'Tornado': 'wind'
+        };
+
+        const iconName = weatherIcons[condition] || 'cloud';
+        
+        weatherElement.innerHTML = `
+            <div class="flex items-center justify-center gap-6">
+                <i data-feather="${iconName}" class="w-20 h-20 stroke-current"></i>
+                <span>${condition}, ${temp}°F</span>
+            </div>
+        `;
+        
+        feather.replace();
+    } catch (error) {
+        console.error('Error fetching weather:', error);
+        weatherElement.innerHTML = `
+            <div class="flex items-center justify-center gap-4">
+                <i data-feather="alert-triangle" class="w-12 h-12"></i>
+                <span>${error.message === 'Invalid API key' ? 'Invalid API Key' : 'Weather Unavailable'}</span>
+            </div>
+        `;
+        feather.replace();
+    }
+}
+
+function initializeTodoList() {
+    const settings = JSON.parse(localStorage.getItem('tabSettings')) || {};
+    const todoList = document.getElementById('todo-list');
+    const todoInput = document.querySelector('.todo-input input');
+    const addButton = document.querySelector('.add-todo');
+
+    // Clear existing todos
+    todoList.innerHTML = '';
+
+    // Load saved todos
+    settings.todos?.forEach(todo => {
+        addTodoItem(todo.text, todo.completed);
+    });
+
+    // Add new todo handler
+    addButton.addEventListener('click', () => {
+        if (todoInput.value.trim() && settings.todos.length < 3) {
+            addTodoItem(todoInput.value.trim());
+            todoInput.value = '';
+            saveTodos();
+        }
+    });
+
+    // Enter key handler
+    todoInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && todoInput.value.trim() && settings.todos.length < 3) {
+            addTodoItem(todoInput.value.trim());
+            todoInput.value = '';
+            saveTodos();
+        }
+    });
+}
+
+function addTodoItem(text, completed = false) {
+    const todoList = document.getElementById('todo-list');
+    const todoItem = document.createElement('div');
+    todoItem.className = 'todo-item flex items-center gap-4 group';
+    
+    todoItem.innerHTML = `
+        <input type="checkbox" class="checkbox checkbox-primary border-2 border-black" ${completed ? 'checked' : ''}>
+        <span class="flex-grow text-xl ${completed ? 'line-through opacity-50' : ''}">${text}</span>
+        <button class="delete-todo opacity-0 group-hover:opacity-100 transition-opacity btn btn-ghost btn-xs text-error">
+            <i data-feather="x"></i>
+        </button>
+    `;
+
+    // Add event listeners
+    const checkbox = todoItem.querySelector('input');
+    checkbox.addEventListener('change', () => {
+        const span = todoItem.querySelector('span');
+        span.classList.toggle('line-through');
+        span.classList.toggle('opacity-50');
+        saveTodos();
+    });
+
+    const deleteButton = todoItem.querySelector('.delete-todo');
+    deleteButton.addEventListener('click', () => {
+        todoItem.remove();
+        saveTodos();
+    });
+
+    todoList.appendChild(todoItem);
+    feather.replace();
+}
+function saveTodos() {
+    const settings = JSON.parse(localStorage.getItem('tabSettings')) || {};
+    const todos = [];
+    document.querySelectorAll('.todo-item').forEach(item => {
+        todos.push({
+            text: item.querySelector('span').textContent,
+            completed: item.querySelector('input').checked
+        });
+    });
+    settings.todos = todos;
+    localStorage.setItem('tabSettings', JSON.stringify(settings));
+}
+
