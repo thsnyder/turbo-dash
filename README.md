@@ -17,7 +17,7 @@ A minimalist, brutalist-style new tab page that combines functionality with bold
 
 ## Installation
 
-1. Visit the Chrome Web Store [https://chromewebstore.google.com/detail/turbo-dash/ojiejgejlecdfkkcemeobbogdfjclicj?hl=en-US&utm_source=ext_sidebar]
+1. Visit the Chrome Web Store [link](https://chromewebstore.google.com/detail/turbo-dash/ojiejgejlecdfkkcemeobbogdfjclicj?hl=en-US&utm_source=ext_sidebar)
 2. Click "Add to Chrome"
 3. The extension will automatically activate on new tabs
 
