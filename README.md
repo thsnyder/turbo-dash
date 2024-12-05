@@ -1,6 +1,6 @@
-# Brutalist Tab
+# Turbo Dash
 
-![Brutalist Tab Icon](icons/icon128.png)
+![Turbo Dash Icon](icons/icon128.png)
 
 A minimalist, brutalist-style new tab page that combines functionality with bold, stark design. This Chrome extension transforms your new tab experience with essential features wrapped in an aesthetically striking interface.
 
@@ -20,7 +20,6 @@ A minimalist, brutalist-style new tab page that combines functionality with bold
 1. Visit the Chrome Web Store [link]
 2. Click "Add to Chrome"
 3. The extension will automatically activate on new tabs
-4. If you wish to install a local version, you can download the TurboDash.zip file and load it unpacked in Chrome.
 
 ## Usage
 
@@ -41,12 +40,12 @@ A minimalist, brutalist-style new tab page that combines functionality with bold
 
 ### Customization
 1. Click the settings icon in the top-right corner
-2. Adjust theme colors, typography, and layout
-3. Changes save automatically
+2. Adjust theme colors and layout
+3. Changes save when the "Save Changes" buttons is clicked
 
 ## Privacy
 
-Brutalist Tab respects your privacy:
+Turbo Dash respects your privacy:
 - No data collection or tracking
 - Weather data requires location permission (optional)
 - All data stored locally on your device
