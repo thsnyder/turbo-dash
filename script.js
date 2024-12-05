@@ -93,6 +93,17 @@ function loadSettings() {
         searchContainer.style.display = settings.showSearch ? 'block' : 'none';
     }
 
+    // Handle weather container visibility
+    const weatherContainer = document.getElementById('weather');
+    if (weatherContainer) {
+        if (settings.showWeather) {
+            weatherContainer.style.display = 'block';
+            updateWeather();
+        } else {
+            weatherContainer.style.display = 'none';
+        }
+    }
+
     // Initialize feather icons
     feather.replace();
 }
@@ -145,7 +156,7 @@ function updateTime() {
 async function updateWeather() {
     console.log('updateWeather function called');
     const weatherElement = document.getElementById('weather');
-    if (!weatherElement) return;
+    if (!weatherElement || !JSON.parse(localStorage.getItem('tabSettings'))?.showWeather) return;
 
     // Get settings from localStorage
     const settings = JSON.parse(localStorage.getItem('tabSettings')) || {};
