@@ -138,6 +138,7 @@ function loadSettings() {
         weatherLat: '',
         weatherLon: '',
         showTodo: false,
+        showWeather: true,
         todos: [],
         links: [
             { name: 'Link 1', url: '#' },
@@ -159,6 +160,7 @@ function loadSettings() {
     document.getElementById('weather-lon').value = settings.weatherLon || '';
     document.getElementById('show-todo').checked = settings.showTodo;
     document.getElementById('show-search').checked = settings.showSearch;
+    document.getElementById('show-weather').checked = settings.showWeather;
 
     // Apply theme
     document.documentElement.setAttribute('data-theme', settings.theme);
@@ -190,6 +192,7 @@ function saveSettings() {
         weatherLat: document.getElementById('weather-lat').value.trim(),
         weatherLon: document.getElementById('weather-lon').value.trim(),
         showTodo: document.getElementById('show-todo').checked,
+        showWeather: document.getElementById('show-weather').checked,
         todos: JSON.parse(localStorage.getItem('tabSettings'))?.todos || [],
         links: [],
         icons: [],
