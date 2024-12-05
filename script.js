@@ -1,222 +1,252 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="cupcake">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings - Brutalist Tab</title>
-    <link rel="stylesheet" href="src/output.css">
-    <script src="lib/feather.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap" rel="stylesheet">
-
-    <style>
-        /* Existing styles */
-        
-        .title-font {
-            font-family: 'Dela Gothic One', system-ui;
-        }
-    </style>
-
-</head>
-<body>
-<div class="min-h-screen bg-base-300 text-base-content p-10">
-    <!-- Back Button -->
-    <a href="tab.html" class="btn btn-square btn-base-100 absolute top-4 left-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-xl">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="square" stroke-linejoin="miter" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-        </svg>
-    </a>
-
-    <div class="max-w-3xl mx-auto">
-        <!-- Title Section -->
-        <div class="text-center mb-12">
-            <div class="flex items-center justify-center gap-4 mb-2">
-                <img src="icons/turbo-dash-logo.png" alt="Turbo Dash Logo" class="w-16 h-16 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                <h1 class="text-5xl title-font mb-2">Turbo Dash</h1>
-            </div>
-            <p class="text-base-content/70">Your personal dashboard, turbocharged.</p>
-        </div>
-
-        <h2 class="text-2xl font-bold mb-8">Settings</h2>
-        
-        <div class="space-y-8">
-            <!-- Theme Selection -->
-            <div class="form-control mb-6">
-                <label class="label">
-                    <span class="label-text text-lg font-bold">Theme</span>
-                </label>
-                <select id="theme-select" class="select w-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100">
-                    <option value="cupcake">Cupcake</option>
-                    <option value="dark">Dark</option>
-                    <option value="cyberpunk">Cyberpunk</option>
-                    <option value="forest">Forest</option>
-                    <option value="business">Business</option>
-                    <option value="night">Night</option>
-                    <option value="bumblebee">Bumblebee</option>
-                    <option value="retro">Retro</option>
-                    <option value="synthwave">Synthwave</option>
-                    <option value="valentine">Valentine</option>
-                    <option value="aqua">Aqua</option>
-                    <option value="dracula">Dracula</option>
-                    <option value="luxury">Luxury</option>
-                    <option value="coffee">Coffee</option>
-                    <option value="winter">Winter</option>
-                    <option value="garden">Garden</option>
-                    <option value="lofi">Lo-Fi</option>
-                    <option value="pastel">Pastel</option>
-                    <option value="fantasy">Fantasy</option>
-                    <option value="wireframe">Wireframe</option>
-                </select>
-            </div>
-
-            <!-- Name Input -->
-            <div class="form-control mb-6">
-                <label class="label">
-                    <span class="label-text text-lg font-bold">Your Name</span>
-                </label>
-                <input type="text" id="name-input" placeholder="Enter your name" class="input w-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" />
-            </div>
-
-            <!-- Weather Settings -->
-            <div class="form-control mb-8">
-                <label class="label">
-                    <span class="label-text text-lg font-bold">Weather Settings</span>
-                </label>
-                
-                <!-- Accordion for API Instructions -->
-                <div class="collapse collapse-arrow bg-base-100 border-2 border-black rounded-xl mb-4">
-                    <input type="checkbox" /> 
-                    <div class="collapse-title text-lg font-bold">
-                        How to get your free OpenWeather API key
-                    </div>
-                    <div class="collapse-content">
-                        <ol class="list-decimal list-inside space-y-2">
-                            <li>Visit <a href="https://openweathermap.org/api" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">OpenWeather API</a></li>
-                            <li>Click "Subscribe" under the Free tier</li>
-                            <li>Create an account or sign in</li>
-                            <li>Go to your API keys section</li>
-                            <li>Copy your API key and paste it below</li>
-                            <li>Note: New API keys may take a few hours to activate</li>
-                        </ol>
-                    </div>
-                </div>
-
-                <!-- API Key Input -->
-                <input type="text" 
-                       id="weather-api-key" 
-                       placeholder="Paste your OpenWeather API key here" 
-                       class="input w-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100 mb-4" />
-
-                <!-- Latitude and Longitude Inputs -->
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div>
-                        <label class="label">
-                            <span class="label-text">Latitude</span>
-                        </label>
-                        <input type="number" 
-                               id="weather-lat" 
-                               step="0.000001"
-                               placeholder="e.g., 40.7128" 
-                               class="input w-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" />
-                    </div>
-                    <div>
-                        <label class="label">
-                            <span class="label-text">Longitude</span>
-                        </label>
-                        <input type="number" 
-                               id="weather-lon" 
-                               step="0.000001"
-                               placeholder="e.g., -74.0060" 
-                               class="input w-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" />
-                    </div>
-                </div>
-                <div class="mt-2 text-sm text-base-content/70">
-                    <p>Find your coordinates at: <a href="https://www.latlong.net" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">latlong.net</a></p>
-                </div>
-            </div>
-
-            <!-- Add-ons -->
-            <div class="form-control mb-8">
-                <label class="label">
-                    <span class="label-text text-lg font-bold">Add-ons</span>
-                </label>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="flex items-center">
-                        <label class="label cursor-pointer">
-                            <input type="checkbox" id="show-search" class="checkbox checkbox-primary border-2 border-black" />
-                            <span class="label-text ml-2">Show Google Search Bar</span>
-                        </label>
-                    </div>
-                    <div class="flex items-center">
-                        <label class="label cursor-pointer">
-                            <input type="checkbox" id="show-todo" class="checkbox checkbox-primary border-2 border-black" />
-                            <span class="label-text ml-2">Show To-Do List</span>
-                        </label>
-                    </div>
-                    <div class="flex items-center">
-                        <label class="label cursor-pointer">
-                            <input type="checkbox" id="show-weather" class="checkbox checkbox-primary border-2 border-black" />
-                            <span class="label-text ml-2">Show Weather Widget</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Icons Configuration -->
-            <div class="form-control mb-8">
-                <label class="label">
-                    <span class="label-text text-lg font-bold">Quick Icons</span>
-                </label>
-                <div id="iconContainer" class="grid gap-4">
-                    <!-- Icons will be added here dynamically -->
-                </div>
-                <button id="addIconButton" class="btn btn-base-100 mt-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">
-                    + Add Quick Icon
-                </button>
-            </div>
-
-            <!-- Links Configuration -->
-            <div class="space-y-4 mb-8">
-                <label class="label">
-                    <span class="label-text text-lg font-bold">Quick Links</span>
-                </label>
-                <div id="linkContainer" class="grid gap-4">
-                    <!-- Links will be added here dynamically -->
-                </div>
-                <button id="addLinkButton" class="btn btn-base-100 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">
-                    + Add Another Link
-                </button>
-            </div>
-        </div>
-
-        <div class="mt-10">
-            <button id="saveButton" class="btn btn-primary border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[4px] hover:translate-x-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">Save Changes</button>
-            
-            <a href="https://buymeacoffee.com/turbologic" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               class="btn btn-accent h-16 w-16 rounded-full border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[4px] hover:translate-x-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center text-3xl fixed bottom-8 right-8">
-                ☕️
-            </a>
-        </div>
-
-        <div class="mt-8 text-center text-sm text-base-content/70">
-            <p>Version 1.0.0 • Made with ♥ by 
-                <a href="https://tomsnyder.blog" target="_blank" rel="noopener noreferrer" class="hover:underline">
-                    Tom
-                </a>
-            </p>
-        </div>
-    </div>
-</div>
-<script src="settings.js"></script>
-<style>
-    /* Existing styles */
+document.addEventListener('DOMContentLoaded', function() {
+    loadSettings();
     
-    .title-font {
-        font-family: 'Dela Gothic One', system-ui;
+    // Add theme change listener
+    const themeSelect = document.getElementById('theme-select');
+    if (themeSelect) {
+        themeSelect.addEventListener('change', function() {
+            document.documentElement.setAttribute('data-theme', this.value);
+        });
     }
-</style>
-</body>
-</html> 
+
+    // Add save button listener
+    const saveButton = document.getElementById('saveButton');
+    if (saveButton) {
+        saveButton.addEventListener('click', saveSettings);
+    }
+
+    // Add new link button listener
+    const addLinkButton = document.getElementById('addLinkButton');
+    if (addLinkButton) {
+        addLinkButton.addEventListener('click', addNewLink);
+    }
+
+    // Add new icon button listener
+    const addIconButton = document.getElementById('addIconButton');
+    if (addIconButton) {
+        addIconButton.addEventListener('click', function() {
+            const iconContainer = document.getElementById('iconContainer');
+            if (iconContainer) {
+                iconContainer.appendChild(createIconInputs());
+            }
+        });
+    }
+});
+
+function createLinkInputs(name = '', url = '') {
+    const linkDiv = document.createElement('div');
+    linkDiv.className = 'flex gap-4 items-center';
+    
+    linkDiv.innerHTML = `
+        <input type="text" placeholder="Link Name" class="input w-1/2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" value="${name}"/>
+        <input type="url" placeholder="https://example.com" class="input w-1/2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" value="${url}"/>
+        <button class="btn btn-ghost btn-sm text-error border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all rounded-lg">×</button>
+    `;
+
+    const removeButton = linkDiv.querySelector('button');
+    removeButton.addEventListener('click', () => linkDiv.remove());
+
+    return linkDiv;
+}
+
+function createIconInputs(icon = '', url = '') {
+    const iconDiv = document.createElement('div');
+    iconDiv.className = 'flex gap-4 items-center';
+    
+    iconDiv.innerHTML = `
+        <select class="icon-select input w-1/2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100">
+            <option value="battery" ${icon === 'battery' ? 'selected' : ''}>Battery</option>
+            <option value="bell" ${icon === 'bell' ? 'selected' : ''}>Bell</option>
+            <option value="bluetooth" ${icon === 'bluetooth' ? 'selected' : ''}>Bluetooth</option>
+            <option value="book" ${icon === 'book' ? 'selected' : ''}>Book</option>
+            <option value="bookmark" ${icon === 'bookmark' ? 'selected' : ''}>Bookmark</option>
+            <option value="briefcase" ${icon === 'briefcase' ? 'selected' : ''}>Briefcase</option>
+            <option value="calendar" ${icon === 'calendar' ? 'selected' : ''}>Calendar</option>
+            <option value="camera" ${icon === 'camera' ? 'selected' : ''}>Camera</option>
+            <option value="chrome" ${icon === 'chrome' ? 'selected' : ''}>Chrome</option>
+            <option value="cloud" ${icon === 'cloud' ? 'selected' : ''}>Cloud</option>
+            <option value="code" ${icon === 'code' ? 'selected' : ''}>Code</option>
+            <option value="coffee" ${icon === 'coffee' ? 'selected' : ''}>Coffee</option>
+            <option value="compass" ${icon === 'compass' ? 'selected' : ''}>Compass</option>
+            <option value="credit-card" ${icon === 'credit-card' ? 'selected' : ''}>Credit Card</option>
+            <option value="dollar-sign" ${icon === 'dollar-sign' ? 'selected' : ''}>Dollar</option>
+            <option value="download" ${icon === 'download' ? 'selected' : ''}>Download</option>
+            <option value="edit" ${icon === 'edit' ? 'selected' : ''}>Edit</option>
+            <option value="file" ${icon === 'file' ? 'selected' : ''}>File</option>
+            <option value="film" ${icon === 'film' ? 'selected' : ''}>Film</option>
+            <option value="flag" ${icon === 'flag' ? 'selected' : ''}>Flag</option>
+            <option value="folder" ${icon === 'folder' ? 'selected' : ''}>Folder</option>
+            <option value="github" ${icon === 'github' ? 'selected' : ''}>GitHub</option>
+            <option value="heart" ${icon === 'heart' ? 'selected' : ''}>Heart</option>
+            <option value="home" ${icon === 'home' ? 'selected' : ''}>Home</option>
+            <option value="image" ${icon === 'image' ? 'selected' : ''}>Image</option>
+            <option value="inbox" ${icon === 'inbox' ? 'selected' : ''}>Inbox</option>
+            <option value="key" ${icon === 'key' ? 'selected' : ''}>Key</option>
+            <option value="linkedin" ${icon === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
+            <option value="location" ${icon === 'location' ? 'selected' : ''}>Location</option>
+            <option value="lock" ${icon === 'lock' ? 'selected' : ''}>Lock</option>
+            <option value="mail" ${icon === 'mail' ? 'selected' : ''}>Mail</option>
+            <option value="map" ${icon === 'map' ? 'selected' : ''}>Map</option>
+            <option value="music" ${icon === 'music' ? 'selected' : ''}>Music</option>
+            <option value="phone" ${icon === 'phone' ? 'selected' : ''}>Phone</option>
+            <option value="printer" ${icon === 'printer' ? 'selected' : ''}>Printer</option>
+            <option value="search" ${icon === 'search' ? 'selected' : ''}>Search</option>
+            <option value="send" ${icon === 'send' ? 'selected' : ''}>Send</option>
+            <option value="settings" ${icon === 'settings' ? 'selected' : ''}>Settings</option>
+            <option value="shopping-cart" ${icon === 'shopping-cart' ? 'selected' : ''}>Shopping Cart</option>
+            <option value="star" ${icon === 'star' ? 'selected' : ''}>Star</option>
+            <option value="tablet" ${icon === 'tablet' ? 'selected' : ''}>Tablet</option>
+            <option value="tag" ${icon === 'tag' ? 'selected' : ''}>Tag</option>
+            <option value="trash" ${icon === 'trash' ? 'selected' : ''}>Trash</option>
+            <option value="tv" ${icon === 'tv' ? 'selected' : ''}>TV</option>
+            <option value="twitter" ${icon === 'twitter' ? 'selected' : ''}>Twitter</option>
+            <option value="unlock" ${icon === 'unlock' ? 'selected' : ''}>Unlock</option>
+            <option value="upload" ${icon === 'upload' ? 'selected' : ''}>Upload</option>
+            <option value="user" ${icon === 'user' ? 'selected' : ''}>User</option>
+            <option value="users" ${icon === 'users' ? 'selected' : ''}>Users</option>
+            <option value="video" ${icon === 'video' ? 'selected' : ''}>Video</option>
+            <option value="wifi" ${icon === 'wifi' ? 'selected' : ''}>WiFi</option>
+            <option value="youtube" ${icon === 'youtube' ? 'selected' : ''}>YouTube</option>
+        </select>
+        <input type="url" placeholder="https://example.com" class="input w-1/2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" value="${url}"/>
+        <button class="btn btn-ghost btn-sm text-error border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all rounded-lg">×</button>
+    `;
+
+    const removeButton = iconDiv.querySelector('button');
+    removeButton.addEventListener('click', () => iconDiv.remove());
+
+    return iconDiv;
+}
+
+function addNewLink() {
+    const linkContainer = document.getElementById('linkContainer');
+    linkContainer.appendChild(createLinkInputs());
+}
+
+function addNewIcon() {
+    const iconContainer = document.getElementById('iconContainer');
+    if (iconContainer) {
+        iconContainer.appendChild(createIconInputs());
+    }
+}
+
+function loadSettings() {
+    const settings = JSON.parse(localStorage.getItem('tabSettings')) || {
+        theme: 'cupcake',
+        name: 'Tom',
+        weatherApiKey: '',
+        weatherLat: '',
+        weatherLon: '',
+        showTodo: false,
+        showWeather: true,
+        todos: [],
+        links: [
+            { name: 'Link 1', url: '#' },
+            { name: 'Link 2', url: '#' },
+            { name: 'Link 3', url: '#' }
+        ],
+        icons: [
+            { icon: 'search', url: 'https://google.com' },
+            { icon: 'coffee', url: 'https://buymeacoffee.com/turbologic' }
+        ],
+        showSearch: false,
+    };
+
+    // Set form values
+    document.getElementById('theme-select').value = settings.theme;
+    document.getElementById('name-input').value = settings.name;
+    document.getElementById('weather-api-key').value = settings.weatherApiKey || '';
+    document.getElementById('weather-lat').value = settings.weatherLat || '';
+    document.getElementById('weather-lon').value = settings.weatherLon || '';
+    document.getElementById('show-todo').checked = settings.showTodo;
+    document.getElementById('show-search').checked = settings.showSearch;
+    document.getElementById('show-weather').checked = settings.showWeather;
+
+    // Apply theme
+    document.documentElement.setAttribute('data-theme', settings.theme);
+    
+    // Set link values
+    const linkContainer = document.getElementById('linkContainer');
+    if (linkContainer) {
+        linkContainer.innerHTML = ''; // Clear existing links
+        settings.links.forEach(link => {
+            linkContainer.appendChild(createLinkInputs(link.name, link.url));
+        });
+    }
+
+    // Set icon values
+    const iconContainer = document.getElementById('iconContainer');
+    if (iconContainer) {
+        iconContainer.innerHTML = '';
+        settings.icons.forEach(icon => {
+            iconContainer.appendChild(createIconInputs(icon.icon, icon.url));
+        });
+    }
+}
+
+function saveSettings() {
+    const settings = {
+        theme: document.getElementById('theme-select').value,
+        name: document.getElementById('name-input').value,
+        weatherApiKey: document.getElementById('weather-api-key').value.trim(),
+        weatherLat: document.getElementById('weather-lat').value.trim(),
+        weatherLon: document.getElementById('weather-lon').value.trim(),
+        showTodo: document.getElementById('show-todo').checked,
+        showWeather: document.getElementById('show-weather').checked,
+        todos: JSON.parse(localStorage.getItem('tabSettings'))?.todos || [],
+        links: [],
+        icons: [],
+        showSearch: document.getElementById('show-search').checked,
+    };
+
+    // Get link values
+    const linkInputs = document.querySelectorAll('#linkContainer .flex');
+    linkInputs.forEach(row => {
+        const nameInput = row.querySelector('input[type="text"]');
+        const urlInput = row.querySelector('input[type="url"]');
+        
+        if (nameInput && urlInput) {
+            settings.links.push({
+                name: nameInput.value.trim() || `Link ${settings.links.length + 1}`,
+                url: formatUrl(urlInput.value.trim()) || '#'
+            });
+        }
+    });
+
+    // Get icon values
+    const iconInputs = document.querySelectorAll('#iconContainer .flex');
+    iconInputs.forEach(row => {
+        const iconSelect = row.querySelector('select');
+        const urlInput = row.querySelector('input[type="url"]');
+        
+        if (iconSelect && urlInput) {
+            settings.icons.push({
+                icon: iconSelect.value,
+                url: formatUrl(urlInput.value.trim()) || '#'
+            });
+        }
+    });
+
+    // Save to localStorage
+    localStorage.setItem('tabSettings', JSON.stringify(settings));
+
+    // Redirect back to main page
+    window.location.href = 'tab.html';
+}
+
+// Helper function to format URLs
+function formatUrl(url) {
+    if (!url) return '#';
+    
+    // Handle special cases for icon URLs
+    if (url.startsWith('data:') || url.startsWith('blob:') || url.startsWith('file:')) {
+        return url;
+    }
+    
+    // If the URL doesn't start with http:// or https://, add https://
+    if (!url.match(/^https?:\/\//i)) {
+        return 'https://' + url;
+    }
+    
+    return url;
+}
