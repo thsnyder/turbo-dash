@@ -31,20 +31,32 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Add weather checkbox listener
+    const weatherCheckbox = document.getElementById('show-weather');
+    if (weatherCheckbox) {
+        weatherCheckbox.addEventListener('change', function() {
+            toggleWeatherSettings(this.checked);
+        });
+    }
 });
 
 function createLinkInputs(name = '', url = '') {
     const linkDiv = document.createElement('div');
     linkDiv.className = 'flex gap-4 items-center';
+    linkDiv.draggable = true;
     
     linkDiv.innerHTML = `
+        <button class="drag-handle cursor-move">⋮⋮</button>
         <input type="text" placeholder="Link Name" class="input w-1/2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" value="${name}"/>
         <input type="url" placeholder="https://example.com" class="input w-1/2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" value="${url}"/>
         <button class="btn btn-ghost btn-sm text-error border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all rounded-lg">×</button>
     `;
 
-    const removeButton = linkDiv.querySelector('button');
+    const removeButton = linkDiv.querySelector('button:last-child');
     removeButton.addEventListener('click', () => linkDiv.remove());
+
+    addDragListeners(linkDiv);
 
     return linkDiv;
 }
@@ -52,8 +64,10 @@ function createLinkInputs(name = '', url = '') {
 function createIconInputs(icon = '', url = '') {
     const iconDiv = document.createElement('div');
     iconDiv.className = 'flex gap-4 items-center';
+    iconDiv.draggable = true;
     
     iconDiv.innerHTML = `
+        <button class="drag-handle cursor-move">⋮⋮</button>
         <select class="icon-select input w-1/2 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100">
             <option value="battery" ${icon === 'battery' ? 'selected' : ''}>Battery</option>
             <option value="bell" ${icon === 'bell' ? 'selected' : ''}>Bell</option>
@@ -112,10 +126,61 @@ function createIconInputs(icon = '', url = '') {
         <button class="btn btn-ghost btn-sm text-error border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all rounded-lg">×</button>
     `;
 
-    const removeButton = iconDiv.querySelector('button');
+    const removeButton = iconDiv.querySelector('button:last-child');
     removeButton.addEventListener('click', () => iconDiv.remove());
 
+    addDragListeners(iconDiv);
+
     return iconDiv;
+}
+
+function addDragListeners(element) {
+    element.addEventListener('dragstart', handleDragStart);
+    element.addEventListener('dragover', handleDragOver);
+    element.addEventListener('drop', handleDrop);
+    element.addEventListener('dragenter', handleDragEnter);
+    element.addEventListener('dragleave', handleDragLeave);
+}
+
+let draggedElement = null;
+
+function handleDragStart(e) {
+    draggedElement = this;
+    this.classList.add('opacity-50');
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+}
+
+function handleDragEnter(e) {
+    e.preventDefault();
+    this.classList.add('border-t-2', 'border-primary');
+}
+
+function handleDragLeave(e) {
+    this.classList.remove('border-t-2', 'border-primary');
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    this.classList.remove('border-t-2', 'border-primary');
+    
+    if (draggedElement !== this) {
+        const container = this.parentNode;
+        const allItems = [...container.children];
+        const draggedIndex = allItems.indexOf(draggedElement);
+        const droppedIndex = allItems.indexOf(this);
+
+        if (draggedIndex < droppedIndex) {
+            this.parentNode.insertBefore(draggedElement, this.nextSibling);
+        } else {
+            this.parentNode.insertBefore(draggedElement, this);
+        }
+    }
+    
+    draggedElement.classList.remove('opacity-50');
+    draggedElement = null;
 }
 
 function addNewLink() {
@@ -161,6 +226,9 @@ function loadSettings() {
     document.getElementById('show-todo').checked = settings.showTodo;
     document.getElementById('show-search').checked = settings.showSearch;
     document.getElementById('show-weather').checked = settings.showWeather;
+
+    // Update weather settings visibility
+    toggleWeatherSettings(settings.showWeather);
 
     // Apply theme
     document.documentElement.setAttribute('data-theme', settings.theme);
@@ -249,4 +317,12 @@ function formatUrl(url) {
     }
     
     return url;
+}
+
+// Add this new function
+function toggleWeatherSettings(show) {
+    const weatherSettings = document.querySelectorAll('.weather-setting');
+    weatherSettings.forEach(element => {
+        element.style.display = show ? 'block' : 'none';
+    });
 }
