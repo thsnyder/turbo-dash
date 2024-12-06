@@ -12,10 +12,19 @@
 
     <style>
         /* Existing styles */
-        
-        .title-font {
-            font-family: 'Dela Gothic One', system-ui;
-        }
+    .drag-handle {
+        cursor: move;
+        padding: 0 8px;
+        color: #666;
+    }
+
+    .opacity-50 {
+        opacity: 0.5;
+    }
+
+    .title-font {
+        font-family: 'Dela Gothic One', system-ui;
+    }
     </style>
 
 </head>
@@ -78,8 +87,35 @@
                 <input type="text" id="name-input" placeholder="Enter your name" class="input w-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" />
             </div>
 
-            <!-- Weather Settings -->
+            <!-- Add-ons -->
             <div class="form-control mb-8">
+                <label class="label">
+                    <span class="label-text text-lg font-bold">Add-ons</span>
+                </label>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-center">
+                        <label class="label cursor-pointer">
+                            <input type="checkbox" id="show-search" class="checkbox checkbox-primary border-2 border-black" />
+                            <span class="label-text ml-2">Show Google Search Bar</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center">
+                        <label class="label cursor-pointer">
+                            <input type="checkbox" id="show-todo" class="checkbox checkbox-primary border-2 border-black" />
+                            <span class="label-text ml-2">Show To-Do List</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center">
+                        <label class="label cursor-pointer">
+                            <input type="checkbox" id="show-weather" class="checkbox checkbox-primary border-2 border-black" />
+                            <span class="label-text ml-2">Show Weather Widget</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weather Settings -->
+            <div class="form-control mb-8 weather-setting" style="display: none;">
                 <label class="label">
                     <span class="label-text text-lg font-bold">Weather Settings</span>
                 </label>
@@ -136,33 +172,6 @@
                 </div>
             </div>
 
-            <!-- Add-ons -->
-            <div class="form-control mb-8">
-                <label class="label">
-                    <span class="label-text text-lg font-bold">Add-ons</span>
-                </label>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="flex items-center">
-                        <label class="label cursor-pointer">
-                            <input type="checkbox" id="show-search" class="checkbox checkbox-primary border-2 border-black" />
-                            <span class="label-text ml-2">Show Google Search Bar</span>
-                        </label>
-                    </div>
-                    <div class="flex items-center">
-                        <label class="label cursor-pointer">
-                            <input type="checkbox" id="show-todo" class="checkbox checkbox-primary border-2 border-black" />
-                            <span class="label-text ml-2">Show To-Do List</span>
-                        </label>
-                    </div>
-                    <div class="flex items-center">
-                        <label class="label cursor-pointer">
-                            <input type="checkbox" id="show-weather" class="checkbox checkbox-primary border-2 border-black" />
-                            <span class="label-text ml-2">Show Weather Widget</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-
             <!-- Quick Icons Configuration -->
             <div class="form-control mb-8">
                 <label class="label">
@@ -171,9 +180,11 @@
                 <div id="iconContainer" class="grid gap-4">
                     <!-- Icons will be added here dynamically -->
                 </div>
-                <button id="addIconButton" class="btn btn-base-100 mt-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">
-                    + Add Quick Icon
-                </button>
+                <div class="flex justify-start">
+                    <button id="addIconButton" class="btn btn-base-100 mt-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">
+                        + Add Quick Icon
+                    </button>
+                </div>  
             </div>
 
             <!-- Links Configuration -->
