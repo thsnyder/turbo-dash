@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap" rel="stylesheet">
+    <script src="lib/party.min.js"></script>
 
     <style>
         .title-font {
@@ -35,25 +36,47 @@
         .delay-2 { animation-delay: 0.2s; }
         .delay-3 { animation-delay: 0.3s; }
         .delay-4 { animation-delay: 0.4s; }
+
+        .breathing-orb {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            animation: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0.8;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="min-h-screen bg-base-300 text-base-content p-10 flex flex-col items-center justify-center relative">
     <!-- Settings Button -->
-    <a href="settings.html" class="btn btn-square btn-ghost absolute top-4 right-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-xl">
-        <i data-feather="settings"></i>
-    </a>
+    <div class="absolute top-4 right-4">
+        <a href="settings.html" class="btn btn-square btn-ghost shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-xl">
+            <i data-feather="settings"></i>
+        </a>
+    </div>
 
     <!-- Container wrapper with fixed width and centered -->
     <div class="w-[1200px] grid gap-8">
         <!-- Top Row -->
-        <header class="text-7xl font-black text-center fade-in">
+        <header class="text-7xl font-black text-center fade-in delay-1">
             <h1 class="text-secondary title-font">Hi, Tom</h1>
         </header>
 
         <!-- Time, Weather, and Todo Row -->
         <div class="grid grid-cols-3 gap-8">
-            <div id="clock" class="time bg-base-100 p-4 text-7xl font-bold text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl fade-in delay-1 flex items-center justify-center">00:00</div>
+            <div id="clock" class="time bg-base-100 p-4 text-7xl font-bold text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl fade-in delay-2 flex items-center justify-center">00:00</div>
             <div id="weather" class="weather bg-base-100 p-10 text-5xl font-bold text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl fade-in delay-2">
                 <div class="weather-loading">Loading...</div>
                 <div class="weather-error" style="display: none">Weather Unavailable</div>
@@ -62,7 +85,7 @@
                     <span class="description"></span>
                 </div>
             </div>
-            <div id="todo-container" class="todo-container bg-base-100 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl fade-in delay-3" style="display: none;">
+            <div id="todo-container" class="todo-container bg-base-100 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl fade-in delay-2" style="display: none;">
                 <div class="todos space-y-4">
                     <div id="todo-list" class="space-y-2">
                         <!-- Todos will be inserted here -->
@@ -77,40 +100,186 @@
             </div>
         </div>
 
-        <!-- Search Container -->
-        <div id="search-container" class="search-container bg-base-100 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl fade-in delay-2" style="display: none;">
-            <form id="search-form" class="flex gap-4" action="https://www.google.com/search" method="get" target="_blank">
-                <input 
-                    type="text" 
-                    name="q" 
-                    placeholder="Search Google..." 
-                    class="input flex-grow border border-base-300 shadow-sm focus:outline-none rounded-xl bg-base-100"
-                >
-                <button type="submit" class="btn btn-ghost border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">
-                    <i data-feather="search"></i>
-                </button>
-            </form>
-        </div>
-
         <!-- Icons and Links Row -->
         <div class="grid grid-cols-3 gap-8">
             <!-- Quick Icons Container -->
-            <div class="quick-icons-container bg-base-100 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl fade-in delay-4">
+            <div class="quick-icons-container bg-base-100 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl fade-in delay-3">
                 <div class="quick-icons grid grid-cols-3 gap-6 place-items-center">
                     <!-- Icons will be dynamically inserted here -->
                 </div>
             </div>
 
             <!-- Links Container -->
-            <div class="links-container col-span-2 bg-base-100 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl fade-in delay-4">
+            <div class="links-container col-span-2 bg-base-100 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl fade-in delay-3">
                 <div class="links grid grid-cols-4 gap-8 text-center">
                     <!-- Links will be dynamically inserted here -->
                 </div>
             </div>
         </div>
+
+        <!-- Search, Quote, Habits, and Calculator Row -->
+        <div class="grid grid-cols-3 auto-rows-fr gap-8 fade-in delay-4">
+            <!-- Mindfulness Container -->
+            <div id="mindfulness-container" class="mindfulness-container bg-base-100 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl" style="display: none;">
+                <div class="flex flex-col gap-4 items-center">
+                    <h3 class="text-xl font-bold mb-4">Mindfulness Minute</h3>
+                    <div id="breathing-orb" class="breathing-orb bg-base-300"></div>
+                    <button id="start-mindfulness" class="btn btn-primary">Start Exercise</button>
+                </div>
+            </div>
+            <!-- Quote Container -->
+            <div id="quote-container" class="quote-container bg-base-100 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl" >
+                <div class="flex flex-col gap-4">
+                    <p id="quote-text" class="text-lg italic">Loading quote...</p>
+                    <p id="quote-author" class="text-right text-sm">...</p>
+                </div>
+            </div>
+
+            <!-- Daily Habits Container -->
+            <div id="habits-container" class="habits-container bg-base-100 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl" style="display: none;">
+                <div class="habits space-y-4">
+                    <h3 class="text-xl font-bold mb-4">Daily Habits</h3>
+                    <div id="habits-list" class="space-y-2">
+                        <!-- Habits will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Joke Container -->
+            <div id="joke-container" class="joke-container bg-base-100 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl" style="display: none;">
+                <div class="flex flex-col gap-4">
+                    <p id="joke-setup" class="text-lg font-bold">Loading joke...</p>
+                    <p id="joke-punchline" class="text-right text-sm blur cursor-pointer">...</p>
+                </div>
+            </div>
+
+            <!-- Calculator Container -->
+            <div id="calculator-container" class="calculator-container bg-base-100 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl" style="display: none;">
+                <div class="calculator">
+                    <div class="flex gap-2 mb-4">
+                        <input type="text" id="calc-display" class="input flex-grow text-right text-xl font-mono bg-base-200 border-2 border-black rounded-xl h-10 px-3" readonly>
+                        <button class="calc-btn btn btn-secondary border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-10 text-base font-medium px-4">C</button>
+                    </div>
+                    <div class="grid grid-cols-4 gap-0.5">
+                        <button class="calc-btn btn btn-ghost border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">7</button>
+                        <button class="calc-btn btn btn-ghost border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">8</button>
+                        <button class="calc-btn btn btn-ghost border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">9</button>
+                        <button class="calc-btn btn btn-primary border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">/</button>
+                        <button class="calc-btn btn btn-ghost border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">4</button>
+                        <button class="calc-btn btn btn-ghost border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">5</button>
+                        <button class="calc-btn btn btn-ghost border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">6</button>
+                        <button class="calc-btn btn btn-primary border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">*</button>
+                        <button class="calc-btn btn btn-ghost border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">1</button>
+                        <button class="calc-btn btn btn-ghost border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">2</button>
+                        <button class="calc-btn btn btn-ghost border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">3</button>
+                        <button class="calc-btn btn btn-primary border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">-</button>
+                        <button class="calc-btn btn btn-ghost border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">0</button>
+                        <button class="calc-btn btn btn-ghost border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">.</button>
+                        <button class="calc-btn btn btn-accent border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">=</button>
+                        <button class="calc-btn btn btn-primary border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all h-12 text-base font-medium p-4">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 <script src="lib/feather.min.js"></script>
 <script src="script.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const taskInput = document.getElementById('task-input');
+        const taskList = document.getElementById('task-list');
+
+        function updateTaskInputVisibility() {
+            const tasks = taskList.getElementsByTagName('li');
+            if (tasks.length >= 3) {
+                taskInput.style.display = 'none';
+            } else {
+                taskInput.style.display = 'block';
+            }
+        }
+
+        // Call this function whenever a task is added or removed
+        function addTask(task) {
+            const li = document.createElement('li');
+            li.textContent = task;
+            taskList.appendChild(li);
+            updateTaskInputVisibility();
+        }
+
+        // Example of adding a task
+        document.getElementById('add-task-button').addEventListener('click', function() {
+            const task = taskInput.value.trim();
+            if (task) {
+                addTask(task);
+                taskInput.value = ''; // Clear input after adding
+            }
+        });
+
+        // Initial call to set the correct visibility on page load
+        updateTaskInputVisibility();
+    });
+
+    function loadSettings() {
+        // ... existing code ...
+
+        // Handle calculator container visibility
+        const calculatorContainer = document.getElementById('calculator-container');
+        if (calculatorContainer) {
+            calculatorContainer.style.display = settings.showCalculator ? 'block' : 'none';
+            if (settings.showCalculator) {
+                initializeCalculator();
+            }
+        }
+    }
+
+    function initializeCalculator() {
+        const calcDisplay = document.getElementById('calc-display');
+        const calcButtons = document.querySelectorAll('.calc-btn');
+        let currentInput = '';
+        let operator = '';
+        let firstOperand = null;
+
+        calcButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.textContent;
+
+                if (value === 'C') {
+                    // Clear the display and reset variables
+                    currentInput = '';
+                    operator = '';
+                    firstOperand = null;
+                } else if (value === '=') {
+                    if (firstOperand !== null && operator) {
+                        currentInput = calculate(firstOperand, parseFloat(currentInput), operator).toString();
+                        firstOperand = null;
+                        operator = '';
+                    }
+                } else if (['+', '-', '*', '/'].includes(value)) {
+                    if (firstOperand === null) {
+                        firstOperand = parseFloat(currentInput);
+                        operator = value;
+                        currentInput = '';
+                    }
+                } else {
+                    currentInput += value;
+                }
+
+                calcDisplay.value = currentInput;
+            });
+        });
+    }
+
+    function calculate(a, b, op) {
+        switch (op) {
+            case '+': return a + b;
+            case '-': return a - b;
+            case '*': return a * b;
+            case '/': return a / b;
+            default: return b;
+        }
+    }
+</script>
 </body>
 </html>

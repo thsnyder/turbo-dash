@@ -10,6 +10,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Update weather every 30 minutes
     setInterval(updateWeather, 30 * 60 * 1000);
+
+    loadAndDisplayQuote();
+    initializeHabits();
+    loadAndDisplayJoke();
+    setupPunchlineClick();
+    initializeMindfulness();
 });
 
 function loadSettings() {
@@ -23,10 +29,14 @@ function loadSettings() {
             { name: 'Buy Me a Coffee', url: 'https://buymeacoffee.com/turbologic' }
         ],
         icons: [
-            { icon: 'search', url: 'https://google.com' },
             { icon: 'coffee', url: 'https://buymeacoffee.com/turbologic' },
             { icon: 'linkedin', url: 'https://linkedin.com' }
-        ]
+        ],
+        showQuote: true,
+        showCalculator: false,
+        showHabits: false,
+        habits: [],
+        showMindfulness: false
     };
 
     // Apply settings
@@ -63,16 +73,25 @@ function loadSettings() {
     if (iconsContainer) {
         iconsContainer.innerHTML = '';
         settings.icons.forEach(icon => {
-            console.log('Creating icon:', icon); // Debug log
+            console.log('Creating icon:', icon);
             const iconLink = document.createElement('a');
             iconLink.href = icon.url;
             iconLink.className = 'p-4 hover:bg-base-200 rounded-xl transition-all group';
-            iconLink.innerHTML = `<i data-feather="${icon.icon}" class="stroke-current group-hover:stroke-primary transition-colors"></i>`;
+            
+            if (icon.icon === 'reddit-icon') {
+                iconLink.innerHTML = `<img src="lib/uploaded/reddit.svg" class="w-6 h-6 group-hover:stroke-primary transition-colors">`;
+            } else if (icon.icon === 'google-icon') {
+                iconLink.innerHTML = `<img src="lib/uploaded/google.svg" class="w-6 h-6 group-hover:stroke-primary transition-colors">`;
+            } else if (icon.icon === 'google-drive-icon') {
+                iconLink.innerHTML = `<img src="lib/uploaded/google-drive.svg" class="w-6 h-6 group-hover:stroke-primary transition-colors">`;
+            } else {
+                iconLink.innerHTML = `<i data-feather="${icon.icon}" class="stroke-current group-hover:stroke-primary transition-colors"></i>`;
+            }
+            
             iconsContainer.appendChild(iconLink);
         });
         
-        // Initialize Feather icons
-        console.log('Initializing Feather icons'); // Debug log
+        // Initialize Feather icons only for non-custom icons
         feather.replace();
     }
 
@@ -87,12 +106,6 @@ function loadSettings() {
         }
     }
 
-    // Handle search container visibility
-    const searchContainer = document.getElementById('search-container');
-    if (searchContainer) {
-        searchContainer.style.display = settings.showSearch ? 'block' : 'none';
-    }
-
     // Handle weather container visibility
     const weatherContainer = document.getElementById('weather');
     if (weatherContainer) {
@@ -104,15 +117,53 @@ function loadSettings() {
         }
     }
 
-    // Initialize feather icons
-    feather.replace();
+    // Handle quote widget visibility
+    const quoteContainer = document.getElementById('quote-container');
+    if (quoteContainer) {
+        quoteContainer.style.display = settings.showQuote ? 'block' : 'none';
+        if (settings.showQuote) {
+            loadAndDisplayQuote();
+        }
+    }
+
+    // Handle calculator container visibility
+    const calculatorContainer = document.getElementById('calculator-container');
+    if (calculatorContainer) {
+        calculatorContainer.style.display = settings.showCalculator ? 'block' : 'none';
+        if (settings.showCalculator) {
+            initializeCalculator();
+        }
+    }
+
+    // Handle habits container visibility
+    const habitsContainer = document.getElementById('habits-container');
+    if (habitsContainer) {
+        habitsContainer.style.display = settings.showHabits ? 'block' : 'none';
+        if (settings.showHabits) {
+            initializeHabits();
+        }
+    }
+
+    // Handle mindfulness container visibility
+    const mindfulnessContainer = document.getElementById('mindfulness-container');
+    if (mindfulnessContainer) {
+        mindfulnessContainer.style.display = settings.showMindfulness ? 'block' : 'none';
+        if (settings.showMindfulness) {
+            initializeMindfulness();
+        }
+    }
 }
 
 function saveSettings() {
     const settings = {
         theme: document.getElementById('theme-select').value,
         name: document.getElementById('name-input').value,
-        links: []
+        showQuote: document.getElementById('show-quote').checked,
+        links: [],
+        showCalculator: document.getElementById('show-calculator').checked,
+        showHabits: document.getElementById('show-habits').checked,
+        habits: [],
+        showMindfulness: document.getElementById('show-mindfulness').checked
     };
 
     // Get link values
@@ -140,6 +191,42 @@ function saveSettings() {
 
     // Close modal
     document.getElementById('settings_modal').close();
+
+    // Update quote display based on new settings
+    const quoteContainer = document.getElementById('quote-container');
+    if (quoteContainer) {
+        quoteContainer.style.display = settings.showQuote ? 'block' : 'none';
+        if (settings.showQuote) {
+            loadAndDisplayQuote();
+        }
+    }
+
+    // Handle calculator container visibility
+    const calculatorContainer = document.getElementById('calculator-container');
+    if (calculatorContainer) {
+        calculatorContainer.style.display = settings.showCalculator ? 'block' : 'none';
+        if (settings.showCalculator) {
+            initializeCalculator();
+        }
+    }
+
+    // Handle habits container visibility
+    const habitsContainer = document.getElementById('habits-container');
+    if (habitsContainer) {
+        habitsContainer.style.display = settings.showHabits ? 'block' : 'none';
+        if (settings.showHabits) {
+            initializeHabits();
+        }
+    }
+
+    // Handle mindfulness container visibility
+    const mindfulnessContainer = document.getElementById('mindfulness-container');
+    if (mindfulnessContainer) {
+        mindfulnessContainer.style.display = settings.showMindfulness ? 'block' : 'none';
+        if (settings.showMindfulness) {
+            initializeMindfulness();
+        }
+    }
 }
 
 function updateTime() {
@@ -253,7 +340,7 @@ function initializeTodoList() {
 
     // Add new todo handler
     addButton.addEventListener('click', () => {
-        if (todoInput.value.trim() && settings.todos.length < 3) {
+        if (todoInput.value.trim()) {
             addTodoItem(todoInput.value.trim());
             todoInput.value = '';
             saveTodos();
@@ -262,12 +349,32 @@ function initializeTodoList() {
 
     // Enter key handler
     todoInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && todoInput.value.trim() && settings.todos.length < 3) {
+        if (e.key === 'Enter' && todoInput.value.trim()) {
             addTodoItem(todoInput.value.trim());
             todoInput.value = '';
             saveTodos();
         }
     });
+}
+
+function checkAllTodosComplete() {
+    const todoItems = document.querySelectorAll('.todo-item');
+    if (todoItems.length === 0) return false;
+    
+    const allComplete = Array.from(todoItems).every(item => item.querySelector('input').checked);
+    if (allComplete) {
+        const todoContainer = document.getElementById('todo-container');
+        try {
+            party.confetti(todoContainer, {
+                count: party.variation.range(80, 100),
+                spread: party.variation.range(50, 70),
+            });
+            console.log('Todo completion confetti triggered successfully');
+        } catch (error) {
+            console.error('Error triggering todo completion confetti:', error);
+        }
+    }
+    return allComplete;
 }
 
 function addTodoItem(text, completed = false) {
@@ -290,6 +397,7 @@ function addTodoItem(text, completed = false) {
         span.classList.toggle('line-through');
         span.classList.toggle('opacity-50');
         saveTodos();
+        checkAllTodosComplete();
     });
 
     const deleteButton = todoItem.querySelector('.delete-todo');
@@ -301,6 +409,7 @@ function addTodoItem(text, completed = false) {
     todoList.appendChild(todoItem);
     feather.replace();
 }
+
 function saveTodos() {
     const settings = JSON.parse(localStorage.getItem('tabSettings')) || {};
     const todos = [];
@@ -314,3 +423,232 @@ function saveTodos() {
     localStorage.setItem('tabSettings', JSON.stringify(settings));
 }
 
+async function loadAndDisplayQuote() {
+    const settings = JSON.parse(localStorage.getItem('tabSettings')) || {};
+    const quoteContainer = document.getElementById('quote-container');
+    
+    if (!settings.showQuote || !quoteContainer) {
+        if (quoteContainer) quoteContainer.style.display = 'none';
+        return;
+    }
+
+    quoteContainer.style.display = 'block';
+
+    try {
+        const response = await fetch('data/quotes.json');
+        if (!response.ok) throw new Error('Failed to fetch quotes');
+        
+        const quotes = await response.json();
+        if (!Array.isArray(quotes) || quotes.length === 0) throw new Error('Invalid quotes data');
+        
+        const today = new Date().toISOString().split('T')[0];
+        const seed = today.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const randomIndex = seed % quotes.length;
+        
+        const quote = quotes[randomIndex];
+        
+        const quoteText = document.getElementById('quote-text');
+        const quoteAuthor = document.getElementById('quote-author');
+        
+        if (quoteText && quoteAuthor) {
+            quoteText.textContent = `"${quote.quoteText}"`;
+            quoteText.className = 'text-2xl font-serif italic leading-relaxed';
+            const authorName = quote.quoteAuthor || 'Unknown';
+            quoteAuthor.innerHTML = `- <a href="https://www.google.com/search?q=${encodeURIComponent(authorName)}" target="_blank" class="hover:text-primary hover:underline transition-colors">${authorName}</a>`;
+            quoteAuthor.className = 'text-right text-lg font-medium text-base-content/80';
+        }
+    } catch (error) {
+        console.error('Error loading quote:', error);
+        if (quoteContainer) {
+            quoteContainer.innerHTML = `
+                <div class="flex flex-col gap-4">
+                    <p class="text-2xl font-serif italic">Failed to load quote</p>
+                    <p class="text-right text-lg font-medium text-base-content/80">Please try again later</p>
+                </div>
+            `;
+        }
+    }
+}
+
+function initializeCalculator() {
+    const calcDisplay = document.getElementById('calc-display');
+    const calcButtons = document.querySelectorAll('.calc-btn');
+    let currentInput = '';
+    let operator = '';
+    let firstOperand = null;
+
+    calcButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const value = button.textContent;
+
+            if (value === 'C') {
+                // Clear the display and reset variables
+                currentInput = '';
+                operator = '';
+                firstOperand = null;
+            } else if (value === '=') {
+                if (firstOperand !== null && operator) {
+                    currentInput = calculate(firstOperand, parseFloat(currentInput), operator).toString();
+                    firstOperand = null;
+                    operator = '';
+                }
+            } else if (['+', '-', '*', '/'].includes(value)) {
+                if (firstOperand === null) {
+                    firstOperand = parseFloat(currentInput);
+                    operator = value;
+                    currentInput = '';
+                }
+            } else {
+                currentInput += value;
+            }
+
+            calcDisplay.value = currentInput;
+        });
+    });
+}
+
+function calculate(a, b, op) {
+    switch (op) {
+        case '+': return a + b;
+        case '-': return a - b;
+        case '*': return a * b;
+        case '/': return a / b;
+        default: return b;
+    }
+}
+
+function checkAllHabitsComplete() {
+    const habitItems = document.querySelectorAll('.habit-item');
+    if (habitItems.length === 0) return false;
+    
+    const allComplete = Array.from(habitItems).every(item => item.querySelector('input').checked);
+    if (allComplete) {
+        const habitsContainer = document.getElementById('habits-container');
+        try {
+            party.confetti(habitsContainer, {
+                count: party.variation.range(80, 100),
+                spread: party.variation.range(50, 70),
+            });
+            console.log('Habits completion confetti triggered successfully');
+        } catch (error) {
+            console.error('Error triggering habits completion confetti:', error);
+        }
+    }
+    return allComplete;
+}
+
+function initializeHabits() {
+    const settings = JSON.parse(localStorage.getItem('tabSettings')) || {};
+    const habitsList = document.getElementById('habits-list');
+    if (!habitsList || !settings.showHabits) return;
+
+    // Clear existing habits
+    habitsList.innerHTML = '';
+
+    // Get today's date
+    const today = new Date().toISOString().split('T')[0];
+
+    // Load habits and their completion status
+    settings.habits.forEach(habit => {
+        const habitItem = document.createElement('div');
+        habitItem.className = 'habit-item flex items-center gap-4 group';
+        const isCompleted = habit.lastCompleted === today;
+        
+        habitItem.innerHTML = `
+            <input type="checkbox" class="checkbox checkbox-primary border-2 border-black" ${isCompleted ? 'checked' : ''}>
+            <span class="flex-grow text-xl ${isCompleted ? 'line-through opacity-50' : ''}">${habit.name}</span>
+        `;
+
+        // Add event listener for checkbox
+        const checkbox = habitItem.querySelector('input');
+        checkbox.addEventListener('change', () => {
+            const span = habitItem.querySelector('span');
+            span.classList.toggle('line-through');
+            span.classList.toggle('opacity-50');
+            
+            // Update completion status in settings
+            const settings = JSON.parse(localStorage.getItem('tabSettings')) || {};
+            const habitIndex = settings.habits.findIndex(h => h.name === habit.name);
+            if (habitIndex !== -1) {
+                settings.habits[habitIndex].lastCompleted = checkbox.checked ? today : null;
+                localStorage.setItem('tabSettings', JSON.stringify(settings));
+                checkAllHabitsComplete(); // Check if all habits are complete after checkbox change
+            }
+        });
+
+        habitsList.appendChild(habitItem);
+    });
+}
+
+function setupPunchlineClick() {
+    const jokePunchline = document.getElementById('joke-punchline');
+
+    if (jokePunchline) {
+        jokePunchline.addEventListener('click', function() {
+            jokePunchline.classList.toggle('blur');
+        });
+    }
+}
+
+async function loadAndDisplayJoke() {
+    const settings = JSON.parse(localStorage.getItem('tabSettings')) || {};
+    const jokeContainer = document.getElementById('joke-container');
+    
+    if (!settings.showJoke || !jokeContainer) {
+        if (jokeContainer) jokeContainer.style.display = 'none';
+        return;
+    }
+
+    jokeContainer.style.display = 'block';
+
+    try {
+        const response = await fetch('data/jokes.json');
+        if (!response.ok) throw new Error('Failed to fetch jokes');
+        
+        const jokes = await response.json();
+        if (!Array.isArray(jokes) || jokes.length === 0) throw new Error('Invalid jokes data');
+        
+        const today = new Date().toISOString().split('T')[0];
+        const seed = today.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        const randomIndex = seed % jokes.length;
+        
+        const joke = jokes[randomIndex];
+        
+        const jokeSetup = document.getElementById('joke-setup');
+        const jokePunchline = document.getElementById('joke-punchline');
+        
+        if (jokeSetup && jokePunchline) {
+            jokeSetup.textContent = joke.setup;
+            jokePunchline.textContent = joke.punchline;
+            jokePunchline.classList.add('blur'); // Ensure punchline is initially blurred
+        }
+    } catch (error) {
+        console.error('Error loading joke:', error);
+        if (jokeContainer) {
+            jokeContainer.innerHTML = `
+                <div class="flex flex-col gap-4">
+                    <p class="text-lg font-bold">Failed to load joke</p>
+                    <p class="text-right text-sm">Please try again later</p>
+                </div>
+            `;
+        }
+    }
+}
+
+function initializeMindfulness() {
+    const startButton = document.getElementById('start-mindfulness');
+    const breathingOrb = document.getElementById('breathing-orb');
+
+    if (startButton) {
+        startButton.addEventListener('click', () => {
+            breathingOrb.style.animation = 'pulse 12s ease-in-out infinite';
+            breathingOrb.style.opacity = '1';
+
+            // Stop the animation after one minute
+            setTimeout(() => {
+                breathingOrb.style.animation = 'none';
+                breathingOrb.style.opacity = '0';
+            }, 60000); // 60 seconds
+        });
+    }
+}

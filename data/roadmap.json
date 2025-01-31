@@ -1,0 +1,64 @@
+{
+    "items": [
+        {
+            "id": "notes",
+            "title": "Quick Notes Widget", 
+            "description": "A built-in notepad for quick thoughts that stays right on your new tab page",
+            "status": "considering"
+        },
+        {
+            "id": "habit-tracker",
+            "title": "Habit Tracker",
+            "description": "Track your daily habits with customizable goals, streaks, and progress visualizations.",
+            "status": "completed"
+        },
+        {
+            "id": "joke-of-the-day",
+            "title": "Joke of the Day",
+            "description": "Get a new joke every day",
+            "status": "completed"
+        },
+        {
+            "id": "fun-fact",
+            "title": "Random Fun Fact",
+            "description": "A daily interesting fact to spark curiosity.",
+            "status": "considering"
+        },
+        {
+            "id": "mindfulness",
+            "title": "Mindfulness Reminder",
+            "description": "Short breathing exercises or stress relief tips.",
+            "status": "completed"
+        },
+        {
+            "id": "virtual-pet",
+            "title": "Virtual Pet",
+            "description": "A Tamagotchi-style pet that reacts to your productivity.",
+            "status": "considering"
+        },
+        {
+            "id": "horoscope",
+            "title": "Horoscope Widget",
+            "description": "Daily zodiac predictions.",
+            "status": "considering"
+        },
+        {
+            "id": "avatar-maker",
+            "title": "Custom Avatar Maker",
+            "description": "A fun tool to create a pixel art or cartoon avatar.",
+            "status": "considering"
+        },
+        {
+            "id": "daily-challenge",
+            "title": "Daily Challenge",
+            "description": "A small challenge (e.g., \"Send a nice message to someone\").",
+            "status": "considering"
+        },
+        {
+            "id": "magic-8-ball",
+            "title": "Mini Magic 8-Ball",
+            "description": "Ask a question and get a fun answer.",
+            "status": "considering"
+        }
+    ]
+}

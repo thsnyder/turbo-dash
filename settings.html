@@ -39,12 +39,12 @@
 
     <div class="max-w-3xl mx-auto">
         <!-- Title Section -->
-        <div class="text-center mb-12">
-            <div class="flex items-center justify-center gap-4 mb-2">
-                <img src="icons/turbo-dash-logo.png" alt="Turbo Dash Logo" class="w-16 h-16 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                <h1 class="text-5xl title-font mb-2">Turbo Dash</h1>
+        <div class="text-center mb-12 p-4 bg-base-100 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <div class="flex items-center justify-center gap-4 mb-4">
+                <img src="icons/turbo-dash-logo.png" alt="Turbo Dash Logo" class="w-16 h-16 hover:scale-110 transition-transform">
+                <h1 class="text-5xl title-font">Turbo Dash</h1>
             </div>
-            <p class="text-base-content/70">Your personal dashboard, turbocharged.</p>
+            <p class="text-base-content/70 text-lg">Your personal dashboard, turbocharged.</p>
         </div>
 
         <h2 class="text-2xl font-bold mb-8">Settings</h2>
@@ -75,7 +75,6 @@
                     <option value="lofi">Lo-Fi</option>
                     <option value="pastel">Pastel</option>
                     <option value="fantasy">Fantasy</option>
-                    <option value="wireframe">Wireframe</option>
                 </select>
             </div>
 
@@ -87,28 +86,87 @@
                 <input type="text" id="name-input" placeholder="Enter your name" class="input w-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none rounded-xl bg-base-100" />
             </div>
 
-            <!-- Add-ons -->
+            <!-- Additional Widgets -->
             <div class="form-control mb-8">
                 <label class="label">
-                    <span class="label-text text-lg font-bold">Add-ons</span>
+                    <span class="label-text text-lg font-bold">Additional Widgets</span>
+                    <span class="label-text-alt text-base-content/70">Customize your dashboard layout. Personalize your widgets below.</span>
                 </label>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="flex items-center">
-                        <label class="label cursor-pointer">
-                            <input type="checkbox" id="show-search" class="checkbox checkbox-primary border-2 border-black" />
-                            <span class="label-text ml-2">Show Google Search Bar</span>
-                        </label>
-                    </div>
-                    <div class="flex items-center">
-                        <label class="label cursor-pointer">
-                            <input type="checkbox" id="show-todo" class="checkbox checkbox-primary border-2 border-black" />
-                            <span class="label-text ml-2">Show To-Do List</span>
-                        </label>
-                    </div>
-                    <div class="flex items-center">
-                        <label class="label cursor-pointer">
+                <div class="grid grid-cols-2 gap-6 p-4 bg-base-100 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                    <!-- Weather Widget -->
+                    <div class="flex items-center gap-4 p-3 hover:bg-base-200 rounded-lg transition-colors">
+                        <label class="label cursor-pointer flex items-center gap-4">
                             <input type="checkbox" id="show-weather" class="checkbox checkbox-primary border-2 border-black" />
-                            <span class="label-text ml-2">Show Weather Widget</span>
+                            <div>
+                                <span class="label-text font-medium block">Weather Widget</span>
+                                <span class="text-sm text-base-content/70">Local weather updates</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Todo List -->
+                    <div class="flex items-center gap-4 p-3 hover:bg-base-200 rounded-lg transition-colors">
+                        <label class="label cursor-pointer flex items-center gap-4">
+                            <input type="checkbox" id="show-todo" class="checkbox checkbox-primary border-2 border-black" />
+                            <div>
+                                <span class="label-text font-medium block">To-Do List</span>
+                                <span class="text-sm text-base-content/70">Track your daily tasks</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Daily Quote -->
+                    <div class="flex items-center gap-4 p-3 hover:bg-base-200 rounded-lg transition-colors">
+                        <label class="label cursor-pointer flex items-center gap-4">
+                            <input type="checkbox" id="show-quote" class="checkbox checkbox-primary border-2 border-black" />
+                            <div>
+                                <span class="label-text font-medium block">Quote of the Day</span>
+                                <span class="text-sm text-base-content/70">Daily inspiration</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Daily Habits -->
+                    <div class="flex items-center gap-4 p-3 hover:bg-base-200 rounded-lg transition-colors">
+                        <label class="label cursor-pointer flex items-center gap-4">
+                            <input type="checkbox" id="show-habits" class="checkbox checkbox-primary border-2 border-black" />
+                            <div>
+                                <span class="label-text font-medium block">Daily Habits</span>
+                                <span class="text-sm text-base-content/70">Track your daily habits</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Calculator -->
+                    <div class="flex items-center gap-4 p-3 hover:bg-base-200 rounded-lg transition-colors">
+                        <label class="label cursor-pointer flex items-center gap-4">
+                            <input type="checkbox" id="show-calculator" class="checkbox checkbox-primary border-2 border-black" />
+                            <div>
+                                <span class="label-text font-medium block">Calculator</span>
+                                <span class="text-sm text-base-content/70">Simple calculator widget</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Joke of the Day -->
+                    <div class="flex items-center gap-4 p-3 hover:bg-base-200 rounded-lg transition-colors">
+                        <label class="label cursor-pointer flex items-center gap-4">
+                            <input type="checkbox" id="show-joke" class="checkbox checkbox-primary border-2 border-black" />
+                            <div>
+                                <span class="label-text font-medium block">Joke of the Day</span>
+                                <span class="text-sm text-base-content/70">Daily humor to brighten your day</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Mindfulness Reminder -->
+                    <div class="flex items-center gap-4 p-3 hover:bg-base-200 rounded-lg transition-colors">
+                        <label class="label cursor-pointer flex items-center gap-4">
+                            <input type="checkbox" id="show-mindfulness" class="checkbox checkbox-primary border-2 border-black" />
+                            <div>
+                                <span class="label-text font-medium block">Mindfulness Minute</span>
+                                <span class="text-sm text-base-content/70">Short breathing exercises or stress relief tips</span>
+                            </div>
                         </label>
                     </div>
                 </div>
@@ -199,21 +257,78 @@
                     + Add Another Link
                 </button>
             </div>
+
+            <!-- Daily Habits Configuration -->
+            <div class="form-control mb-8 habits-setting" style="display: none;">
+                <label class="label">
+                    <span class="label-text text-lg font-bold">Daily Habits</span>
+                    <span class="label-text-alt text-base-content/70">Add habits you want to track daily</span>
+                </label>
+                <div id="habitsContainer" class="grid gap-4">
+                    <!-- Habits will be added here dynamically -->
+                </div>
+                <div class="flex justify-start">
+                    <button id="addHabitButton" class="btn btn-base-100 mt-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">
+                        + Add Daily Habit
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div class="mt-10">
             <button id="saveButton" class="btn btn-primary border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[4px] hover:translate-x-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">Save Changes</button>
-            
-            <a href="https://buymeacoffee.com/turbologic" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               class="btn btn-accent h-16 w-16 rounded-full border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[4px] hover:translate-x-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center text-3xl fixed bottom-8 right-8">
-                ☕️
-            </a>
         </div>
 
+        <div class="fixed bottom-8 right-8 flex gap-4">
+            <div class="tooltip tooltip-top" data-tip="Leave Turbo Dash a review">
+                <a href="https://chromewebstore.google.com/detail/turbo-dash/ojiejgejlecdfkkcemeobbogdfjclicj" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="btn btn-accent h-16 w-16 rounded-full border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[4px] hover:translate-x-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center text-3xl">
+                    ⭐
+                </a>
+            </div>
+
+            <div class="tooltip tooltip-top" data-tip="Send feedback">
+                <a href="mailto:tom@turbologic.io?subject=Feedback%20on%20Turbo%20Dash" 
+                   class="btn btn-accent h-16 w-16 rounded-full border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[4px] hover:translate-x-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center text-3xl">
+                    💬
+                </a>
+            </div>
+         
+            <div class="tooltip tooltip-top" data-tip="Buy me a coffee">
+                <a href="https://buymeacoffee.com/turbologic" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="btn btn-accent h-16 w-16 rounded-full border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[4px] hover:translate-x-[4px] hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all flex items-center justify-center text-3xl">
+                    ☕️
+                </a>
+            </div>
+        </div>
+
+        <!-- Roadmap Modal -->
+        <dialog id="roadmap_modal" class="modal">
+            <div class="modal-box bg-base-100 p-0 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl w-11/12 max-w-5xl max-h-[80vh] flex flex-col">
+                <div class="sticky top-0 bg-base-100 p-8 pb-4 z-10 border-b-2 border-base-200">
+                    <h3 class="font-bold text-3xl mb-6 title-font">Widget Requests</h3>
+                </div>
+                
+                <div class="p-8 pt-4 overflow-y-auto flex-grow">
+                    <div id="roadmap-items" class="grid grid-cols-2 gap-4">
+                        <!-- Roadmap items will be inserted here -->
+                    </div>
+                </div>
+
+                <div class="sticky bottom-0 bg-base-100 p-8 pt-4 border-t-2 border-base-200">
+                    <form method="dialog">
+                        <button class="btn btn-ghost border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">Close</button>
+                    </form>
+                </div>
+            </div>
+        </dialog>
+
         <div class="mt-8 text-center text-sm text-base-content/70">
-            <p>Version 1.0.0 • Made with ♥ by 
+            <p>Version 1.5.0 • Made with ♥ and ☕️ by 
                 <a href="https://tomsnyder.blog" target="_blank" rel="noopener noreferrer" class="hover:underline">
                     Tom
                 </a>
@@ -222,12 +337,5 @@
     </div>
 </div>
 <script src="settings.js"></script>
-<style>
-    /* Existing styles */
-    
-    .title-font {
-        font-family: 'Dela Gothic One', system-ui;
-    }
-</style>
 </body>
 </html> 
