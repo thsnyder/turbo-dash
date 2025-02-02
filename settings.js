@@ -91,6 +91,12 @@ document.addEventListener('DOMContentLoaded', function() {
             toggleJokeSettings(this.checked);
         });
     }
+
+    // Add event listener for the title section
+    const titleSection = document.getElementById('title-section');
+    if (titleSection) {
+        titleSection.addEventListener('click', openChangelogModal);
+    }
 });
 
 function createLinkInputs(name = '', url = '') {
@@ -932,4 +938,61 @@ function toggleJokeSettings(show) {
     if (jokeContainer) {
         jokeContainer.style.display = show ? 'block' : 'none';
     }
+}
+
+function openChangelogModal() {
+    console.log('openChangelogModal called'); // Debugging log
+    const changelogModal = document.getElementById('changelog_modal');
+    const changelogContent = document.getElementById('changelog-content');
+
+    if (!changelogModal) {
+        console.error('Changelog modal not found');
+        return;
+    }
+
+    fetch('data/roadmap.json')
+        .then(response => response.json())
+        .then(data => {
+            const completedItems = data.items.filter(item => item.status === 'completed');
+            const groupedByVersion = completedItems.reduce((acc, item) => {
+                if (!acc[item.version]) {
+                    acc[item.version] = [];
+                }
+                acc[item.version].push(item);
+                return acc;
+            }, {});
+
+            changelogContent.innerHTML = ''; // Clear previous content
+
+            // Sort versions in descending order
+            const sortedVersions = Object.keys(groupedByVersion).sort((a, b) => {
+                return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+            });
+
+            for (const version of sortedVersions) {
+                const items = groupedByVersion[version];
+                const versionSection = document.createElement('div');
+                versionSection.classList.add('mb-4');
+
+                const versionTitle = document.createElement('h4');
+                versionTitle.classList.add('font-bold', 'text-xl', 'mb-2');
+                versionTitle.textContent = `Version ${version}`;
+                versionSection.appendChild(versionTitle);
+
+                const itemList = document.createElement('ul');
+                itemList.classList.add('list-disc', 'list-inside');
+
+                items.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<strong>${item.title}</strong>: ${item.description}`;
+                    itemList.appendChild(listItem);
+                });
+
+                versionSection.appendChild(itemList);
+                changelogContent.appendChild(versionSection);
+            }
+        })
+        .catch(error => console.error('Error fetching roadmap:', error));
+
+    changelogModal.showModal();
 }

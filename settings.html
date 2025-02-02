@@ -39,7 +39,7 @@
 
     <div class="max-w-3xl mx-auto">
         <!-- Title Section -->
-        <div class="text-center mb-12 p-4 bg-base-100 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+        <div id="title-section" class="text-center mb-12 p-4 bg-base-100 rounded-xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] cursor-pointer">
             <div class="flex items-center justify-center gap-4 mb-4">
                 <img src="icons/turbo-dash-logo.png" alt="Turbo Dash Logo" class="w-16 h-16 hover:scale-110 transition-transform">
                 <h1 class="text-5xl title-font">Turbo Dash</h1>
@@ -322,6 +322,33 @@
                 <div class="sticky bottom-0 bg-base-100 p-8 pt-4 border-t-2 border-base-200">
                     <form method="dialog">
                         <button class="btn btn-ghost border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">Close</button>
+                    </form>
+                </div>
+            </div>
+        </dialog>
+
+        <!-- Changelog Modal -->
+        <dialog id="changelog_modal" class="modal">
+            <div class="modal-box bg-base-100 p-0 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl w-11/12 max-w-5xl flex flex-col">
+                <div class="sticky top-0 bg-base-100 p-8 pb-4 z-10 border-b-2 border-base-200">
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl">📝</span>
+                        <h3 class="font-bold text-3xl title-font">Changelog</h3>
+                    </div>
+                    <p class="text-base-content/70 mt-2">See what's new in Turbo Dash</p>
+                </div>
+                
+                <div class="p-8 pt-4 overflow-y-auto flex-grow">
+                    <div id="changelog-content" class="space-y-6 divide-y divide-base-200">
+                        <!-- Changelog items will be inserted here -->
+                    </div>
+                </div>
+
+                <div class="sticky bottom-0 bg-base-100 p-8 pt-4 border-t-2 border-base-200">
+                    <form method="dialog" class="flex justify-end">
+                        <button class="btn btn-primary border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all rounded-xl">
+                            Close
+                        </button>
                     </form>
                 </div>
             </div>

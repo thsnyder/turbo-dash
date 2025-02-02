@@ -46,6 +46,17 @@
             transition: opacity 0.5s ease;
         }
 
+        .blur {
+            filter: blur(5px);
+            cursor: pointer;
+            transition: filter 0.3s ease-in-out;
+        }
+
+        .blur:hover {
+            filter: blur(3px);
+        }
+
+
         @keyframes pulse {
             0%, 100% {
                 transform: scale(1);
@@ -124,9 +135,22 @@
                 <div class="flex flex-col gap-4 items-center">
                     <h3 class="text-xl font-bold mb-4">Mindfulness Minute</h3>
                     <div id="breathing-orb" class="breathing-orb bg-base-300"></div>
-                    <button id="start-mindfulness" class="btn btn-primary">Start Exercise</button>
+                    <div class="flex gap-4 mt-4">
+                        <button id="start-mindfulness" class="btn btn-primary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black">Start Exercise</button>
+                        <button id="stop-mindfulness" class="btn btn-secondary shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black">Stop</button>
+                    </div>
                 </div>
             </div>
+
+            <!-- New Mindfulness Overlay -->
+            <div id="mindfulness-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style="display: none;">
+                <div class="flex flex-col items-center">
+                    <div id="breathing-orb" class="breathing-orb bg-base-300"></div>
+                    <p id="mindfulness-timer" class="text-2xl font-semibold text-white mt-4"></p>
+                    <div id="mindfulness-progress" class="w-full h-2 bg-primary mt-4"></div>
+                </div>
+            </div>
+
             <!-- Quote Container -->
             <div id="quote-container" class="quote-container bg-base-100 p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] border-2 border-black rounded-2xl" >
                 <div class="flex flex-col gap-4">

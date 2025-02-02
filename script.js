@@ -585,7 +585,7 @@ function setupPunchlineClick() {
 
     if (jokePunchline) {
         jokePunchline.addEventListener('click', function() {
-            jokePunchline.classList.toggle('blur');
+            jokePunchline.classList.remove('blur'); // Remove blur on click
         });
     }
 }
@@ -593,7 +593,7 @@ function setupPunchlineClick() {
 async function loadAndDisplayJoke() {
     const settings = JSON.parse(localStorage.getItem('tabSettings')) || {};
     const jokeContainer = document.getElementById('joke-container');
-    
+
     if (!settings.showJoke || !jokeContainer) {
         if (jokeContainer) jokeContainer.style.display = 'none';
         return;
@@ -604,23 +604,29 @@ async function loadAndDisplayJoke() {
     try {
         const response = await fetch('data/jokes.json');
         if (!response.ok) throw new Error('Failed to fetch jokes');
-        
+
         const jokes = await response.json();
         if (!Array.isArray(jokes) || jokes.length === 0) throw new Error('Invalid jokes data');
-        
+
+        // Generate a consistent daily joke
         const today = new Date().toISOString().split('T')[0];
         const seed = today.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
         const randomIndex = seed % jokes.length;
-        
+
         const joke = jokes[randomIndex];
-        
+
         const jokeSetup = document.getElementById('joke-setup');
         const jokePunchline = document.getElementById('joke-punchline');
-        
+
         if (jokeSetup && jokePunchline) {
             jokeSetup.textContent = joke.setup;
             jokePunchline.textContent = joke.punchline;
-            jokePunchline.classList.add('blur'); // Ensure punchline is initially blurred
+            jokePunchline.classList.add('blur'); // Ensure punchline is blurred initially
+
+            // Ensure clicking unblurs it
+            jokePunchline.addEventListener('click', function() {
+                jokePunchline.classList.remove('blur');
+            }, { once: true }); // Ensures the event only triggers once
         }
     } catch (error) {
         console.error('Error loading joke:', error);
@@ -637,18 +643,63 @@ async function loadAndDisplayJoke() {
 
 function initializeMindfulness() {
     const startButton = document.getElementById('start-mindfulness');
+    const stopButton = document.getElementById('stop-mindfulness');
+    const mindfulnessOverlay = document.getElementById('mindfulness-overlay');
     const breathingOrb = document.getElementById('breathing-orb');
+    const progressBar = document.getElementById('mindfulness-progress');
+    const countdownText = document.getElementById('mindfulness-timer');
 
-    if (startButton) {
-        startButton.addEventListener('click', () => {
-            breathingOrb.style.animation = 'pulse 12s ease-in-out infinite';
-            breathingOrb.style.opacity = '1';
+    if (!startButton || !stopButton || !mindfulnessOverlay || !breathingOrb || !progressBar || !countdownText) return;
 
-            // Stop the animation after one minute
-            setTimeout(() => {
-                breathingOrb.style.animation = 'none';
-                breathingOrb.style.opacity = '0';
-            }, 60000); // 60 seconds
-        });
+    let mindfulnessActive = false;
+    let countdownInterval;
+
+    function stopMindfulness() {
+        mindfulnessActive = false;
+        mindfulnessOverlay.style.display = 'none';
+        breathingOrb.style.animation = 'none';
+        breathingOrb.style.opacity = '0';
+        breathingOrb.style.width = '80px'; // Reset orb size
+        breathingOrb.style.height = '80px'; // Reset orb size
+        progressBar.style.width = '0%';
+        document.body.style.filter = 'none'; // Reset brightness
+        clearInterval(countdownInterval);
+        countdownText.style.display = 'none';
     }
+
+    startButton.addEventListener('click', () => {
+        if (mindfulnessActive) return; // Prevent multiple activations
+
+        mindfulnessActive = true;
+
+        // Show the overlay and orb
+        mindfulnessOverlay.style.display = 'flex';
+        breathingOrb.style.animation = 'pulse 12s ease-in-out infinite';
+        breathingOrb.style.opacity = '1';
+        breathingOrb.style.width = '200px'; // Make the orb larger
+        breathingOrb.style.height = '200px'; // Make the orb larger
+
+        // Dim other elements
+        document.body.style.filter = 'brightness(50%)';
+
+        // Start the progress bar animation
+        progressBar.style.width = '100%';
+        progressBar.style.transition = 'width 60s linear';
+
+        // Start countdown timer
+        let timeLeft = 60;
+        countdownText.textContent = `${timeLeft}s`;
+        countdownText.style.display = 'block';
+
+        countdownInterval = setInterval(() => {
+            timeLeft -= 1;
+            countdownText.textContent = `${timeLeft}s`;
+
+            if (timeLeft <= 0) {
+                stopMindfulness();
+            }
+        }, 1000);
+    });
+
+    stopButton.addEventListener('click', stopMindfulness);
 }
